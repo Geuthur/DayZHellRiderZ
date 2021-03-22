@@ -39,12 +39,6 @@ class HRZ_CannabisSymptom extends SymptomBase
 		matiColors.SetParam("Saturation", 2.0 );
 		matiColors.SetParam("Vignette", 0.88);
 		matiColors.SetParam("VignetteColor", 0.2);
-
-		rotiBlur.SetParam("Power", 0.50 );
-		rotiBlur.SetParam("MinDepth", 2.50 );
-		rotiBlur.SetParam("MaxDepth", 10.0 );
-
-		radiBlur.SetParam("OffsetX", 0.76 );
   }
   
   override void OnGetDeactivatedServer(PlayerBase player)
@@ -62,12 +56,6 @@ class HRZ_CannabisSymptom extends SymptomBase
 		matiColors.SetParam("Saturation", 1.0 );
 		matiColors.SetParam("Vignette", 0.00);
 		matiColors.SetParam("VignetteColor", 0.0);
-
-		rotiBlur.SetParam("Power", 0.00 );
-		rotiBlur.SetParam("MinDepth", 0.00 );
-		rotiBlur.SetParam("MaxDepth", 0.00);
-
-		radiBlur.SetParam("OffsetX", 0.00 );
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }
