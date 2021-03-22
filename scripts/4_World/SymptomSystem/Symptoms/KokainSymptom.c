@@ -1,9 +1,3 @@
-modded class SymptomBase
-{
-    static ref ScriptInvoker Event_OnActivatedClient = new ScriptInvoker();
-    static ref ScriptInvoker Event_OnGetDeactivatedClient = new ScriptInvoker();
-}
-
 class HRZ_KokainSymptom extends SymptomBase
  {
 	protected bool m_HRZ_IsDrugActive;

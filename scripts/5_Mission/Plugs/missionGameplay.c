@@ -23,17 +23,40 @@ modded class MissionGameplay extends MissionBase {
         Print("Symptom deactivated: " + symptomType.ToString());
     }
 	
+    void OnModifierActivate(PlayerBase player, typename modifierType)
+    {
+		IngameHud hud = IngameHud.Cast(GetHud());
+		hud.HRZ_SetDrugIcon(true);         
+        Print("Modifier activated: " + modifierType.ToString());
+    }
+	
+    void OnModifierDeactivate(PlayerBase player, typename modifierType)
+    {
+		IngameHud hud = IngameHud.Cast(GetHud());
+		hud.HRZ_SetDrugIcon(false);         
+        Print("Modifier deactivated: " + modifierType.ToString());
+    }
+	
 	void MissionGameplay()
 	{	
+		// SymptomBase
         SymptomBase.Event_OnActivatedClient.Insert(OnSymptomActivate); // register our method to recieve events
         SymptomBase.Event_OnGetDeactivatedClient.Insert(OnSymptomDeactivate); // register our method to recieve events
+		// ModifierBase
+		ModifierBase.Event_OnActivate.Insert(OnModifierActivate); // register our method to recieve events
+		ModifierBase.Event_OnDeactivate.Insert(OnModifierDeactivate); // register our method to recieve events
+		// Mute Toggle
         HRZ_AutoMute = GetUApi().GetInputByName("UAHRZToggleMute");
     }
 
 	void ~MissionGameplay()
 	{
+		// SymptomBase
         SymptomBase.Event_OnActivatedClient.Remove(OnSymptomActivate); // unregister our method when mission is over
         SymptomBase.Event_OnGetDeactivatedClient.Remove(OnSymptomDeactivate); // unregister our method to recieve events
+		// ModifierBase
+		ModifierBase.Event_OnActivate.Insert(OnModifierActivate); // register our method to recieve events
+		ModifierBase.Event_OnDeactivate.Insert(OnModifierDeactivate); // register our method to recieve events
 	}    
 	
     override void OnUpdate( float timeslice )
