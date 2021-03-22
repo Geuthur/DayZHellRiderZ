@@ -23,12 +23,12 @@ class HRZ_TestMdfr : ModifierBase
 
 	override protected void OnActivate(PlayerBase player)
 	{
-	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_SHAKEHRZ);
+	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
-	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_SHAKEHRZ);
+	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)
