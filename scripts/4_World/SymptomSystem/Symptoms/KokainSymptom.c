@@ -1,7 +1,5 @@
 class HRZ_KokainSymptom extends SymptomBase
  {
-	protected bool m_HRZ_IsDrugActive;
-	
 	float m_BlurDuration;
 	float m_BlurStrength;
 	float m_EffectTime;
@@ -41,10 +39,6 @@ class HRZ_KokainSymptom extends SymptomBase
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
   {
-		//GetHRZCodeLock().HRZ_Drug();
-
-		//Print (m_HRZ_IsDrugActive);
-		//Print ("1");
 		dynamic.SetParam("Blurriness", 10.0);
 
 		rotiBlur.SetParam("MinDepth", 1.0 );
@@ -110,7 +104,7 @@ class HRZ_KokainSymptom extends SymptomBase
   {
         super.OnGetDeactivatedClient(player);
 
-        Event_OnGetDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
+        Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 
 		chromAbers.SetParam( "PowerX", 0.0 );
 		chromAbers.SetParam( "PowerY", 0.0 );

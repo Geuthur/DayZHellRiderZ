@@ -1,7 +1,7 @@
 modded class SymptomBase
 {
     static ref ScriptInvoker Event_OnActivatedClient = new ScriptInvoker();
-    static ref ScriptInvoker Event_OnGetDeactivatedClient = new ScriptInvoker();
+    static ref ScriptInvoker Event_OnDeactivatedClient = new ScriptInvoker();
 }
 
 modded class SymptomManager
@@ -10,5 +10,7 @@ modded class SymptomManager
 	{
 		super.Init();
 		RegisterSymptom(new HRZ_KokainSymptom);
+		RegisterSymptom(new HRZ_CrystalSymptom);
+		RegisterSymptom(new HRZ_CannabisSymptom);
 	}
 }

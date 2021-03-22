@@ -8,10 +8,33 @@ class HRZ_ActionJointSmokeSelfCB : ActionContinuousBaseCB
 
 class HRZ_ActionJointSmokeSelf: ActionContinuousBase
 {
-	//const string SMOKE_SOUND                  = "Smoking_SoundSet";
-	bool m_ApplyModifier;
-	int CurrentCycles;
+	int jointCyclesToActivateEffect 	= 3;	// How Many Consume to Activate Symptom
 	
+	bool m_HasConsumedJoint = false;
+	int m_jointValue;				// the quantity of the cigarette, what the player consumed
+	
+	
+	bool HasConsumedJoint () {
+		return m_HasConsumedJoint; 
+	} 
+	
+	int GetJointCycles () {
+		return m_jointValue;
+	}
+	
+	void AddValueToJointValue(int value) {	
+			m_jointValue += value;
+			Print (m_jointValue);
+			if((m_jointValue % jointCyclesToActivateEffect) == 0){	
+			m_HasConsumedJoint = true;
+			}
+	}
+	
+	void ResetJointValues() {
+		m_HasConsumedJoint = false;
+		m_jointValue = 0;
+	}
+		
 	void HRZ_ActionJointSmokeSelf()
 	{
 		m_CallbackClass = HRZ_ActionJointSmokeSelfCB;
@@ -61,31 +84,24 @@ class HRZ_ActionJointSmokeSelf: ActionContinuousBase
 			}
 		}
 	}
-
-	override void ApplyModifiers( ActionData action_data )
+	
+	void MakePuke(PlayerBase player)
 	{
-		HRZ_Joint_Base joint = HRZ_Joint_Base.Cast(action_data.m_MainItem);
-				
-		if (joint) {
-			joint.MakeStoned(action_data.m_Player);
-			if (CurrentCycles >= 50)
-			    joint.MakePuke(action_data.m_Player);	
-		}	
+		player.GetModifiersManager().ActivateModifier(HRZ_eModifiers.MDF_Husten);	
 	}
-
+	
 	override void OnFinishProgressClient( ActionData action_data )
 	{
-		PlayerBase player = action_data.m_Player;
+		PlayerBase player = PlayerBase.Cast(action_data.m_Player);
 		HRZ_Joint_Base joint = HRZ_Joint_Base.Cast(action_data.m_MainItem);
 		string joint_type = joint.GetType();
 		
 		BlowSmoke( action_data );  
 		
 		if (joint) {
-			player.AddValueToJointValue(1);
-			CurrentCycles = player.GetJointCycles();
+			AddValueToJointValue(1);
 		}
-			
+		
 		super.OnFinishProgressClient(action_data);
 	}
 
@@ -97,13 +113,27 @@ class HRZ_ActionJointSmokeSelf: ActionContinuousBase
 
 		BlowSmoke( action_data );
 		
-		if (!m_ApplyModifier)
-		{
-		ApplyModifiers(action_data);
-		m_ApplyModifier = true;
-		}
-		
 		GetGame().RPCSingleParam( action_data.m_MainItem, HRZ_SoundTypeSmoking.EXHALE, NULL, true );
+		
+		AddValueToJointValue(1);
+		
+		if((m_jointValue % jointCyclesToActivateEffect) == 0)
+		{
+			EntityAI item = action_data.m_MainItem;
+			PlayerBase player = PlayerBase.Cast(action_data.m_Player);
+			{
+				if(action_data.m_MainItem && player)
+				{
+							if( player.GetModifiersManager().IsModifierActive(HRZ_eModifiers.MDF_Stoned) ) { //effectively resets the timer
+								return;  //let previous modifier finish
+							}
+							// Kokain Trigger Symptom
+							player.GetModifiersManager().ActivateModifier(HRZ_eModifiers.MDF_Stoned);
+							Print("Aktiviert");
+							ResetJointValues();
+				}
+			}
+		}
 	}
 
 	override void OnStartAnimationLoopServer( ActionData action_data )

@@ -24,10 +24,12 @@ class HRZ_CrystalMdfr: ModifierBase
 
 	override protected void OnActivate(PlayerBase player)
 	{
+	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_CRYSTAL);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
+	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_CRYSTAL);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)

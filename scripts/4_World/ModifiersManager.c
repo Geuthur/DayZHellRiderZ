@@ -1,9 +1,3 @@
-modded class ModifierBase
-{
-    static ref ScriptInvoker Event_OnActivate = new ScriptInvoker();
-    static ref ScriptInvoker Event_OnDeactivate = new ScriptInvoker();
-}
-
 modded class ModifiersManager
 {
 	void ModifiersManager(PlayerBase player)

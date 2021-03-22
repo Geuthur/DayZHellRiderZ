@@ -49,19 +49,6 @@ class HRZ_Joint_Base : ItemBase
 		m_SmokingSound = SEffectManager.PlaySoundOnObject( "HRZ_Exhale_SoundSet", this );
 		m_SmokingSound.SetSoundAutodestroy( true );
 	}
-	
-	void MakeStoned(PlayerBase player)
-	{
-		if( player.GetModifiersManager().IsModifierActive(HRZ_eModifiers.MDF_Stoned) ) { //effectively resets the timer
-			return;  //let previous modifier finish
-		}
-		player.GetModifiersManager().ActivateModifier(HRZ_eModifiers.MDF_Stoned);
-	}
-	
-	void MakePuke(PlayerBase player)
-	{
-		player.GetModifiersManager().ActivateModifier(100);	
-	}
 
 	override bool CanPutInCargo( EntityAI parent )
 	{
