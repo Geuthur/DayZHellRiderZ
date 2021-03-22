@@ -33,9 +33,9 @@ modded class ModItemRegisterCallbacks
 			//pType.AddItemInHandsProfileIK("HRZ_RollingPapers", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/mackerel_fillet.anm");
 			pType.AddItemInHandsProfileIK("HRZ_RollingPapers", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/paper.anm");
 			pType.AddItemInHandsProfileIK("HRZ_Syringe", "dz/anims/workspaces/player/player_main/props/player_main_1h_syringe.asi", pBehavior, "dz/anims/anm/player/ik/gear/Syringe_Empty.anm");
-			pType().AddItemInHandsProfileIK("HRZ_Joint", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
-			pType().AddItemInHandsProfileIK("HRZ_JointTop", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
-			pType().AddItemInHandsProfileIK("HRZ_Cigarette", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
+			pType.AddItemInHandsProfileIK("HRZ_Joint", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
+			pType.AddItemInHandsProfileIK("HRZ_JointTop", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
+			pType.AddItemInHandsProfileIK("HRZ_Cigarette", "dz/anims/workspaces/player/player_main/player_main_1h.asi", pBehavior, "dz/anims/anm/player/ik/gear/thermometer.anm");
 	};
 
 }
