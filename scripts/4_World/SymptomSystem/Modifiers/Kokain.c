@@ -29,13 +29,13 @@ class HRZ_KokainMdfr: ModifierBase
 	override protected void OnActivate(PlayerBase player)
 	{
 	player.GetSymptomManager().QueueUpSecondarySymptom(SymptomIDs.SYMPTOM_FEVERBLUR);
-	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_SHAKEHRZ);
+	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
 	player.GetSymptomManager().RemoveSecondarySymptom(SymptomIDs.SYMPTOM_FEVERBLUR);
-	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_SHAKEHRZ);
+	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)

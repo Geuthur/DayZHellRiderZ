@@ -24,14 +24,10 @@ class HRZ_CrystalMdfr: ModifierBase
 
 	override protected void OnActivate(PlayerBase player)
 	{
-	if( player.GetNotifiersManager() ) 
-	player.GetNotifiersManager().ActivateByType(eNotifiers.NTF_PILLS);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
-	if( player.GetNotifiersManager() ) 
-	player.GetNotifiersManager().DeactivateByType(eNotifiers.NTF_PILLS);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)

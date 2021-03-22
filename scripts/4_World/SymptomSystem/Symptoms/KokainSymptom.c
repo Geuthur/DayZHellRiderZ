@@ -35,7 +35,7 @@ class HRZ_KokainSymptom extends SymptomBase
   {
 	m_SymptomType = SymptomTypes.SECONDARY;
 	m_Priority = 0;
-	m_ID = HRZ_SymptomIDs.SYMPTOM_SHAKEHRZ;
+	m_ID = HRZ_SymptomIDs.SYMPTOM_KOKAIN;
 	m_DestroyOnAnimFinish = true;
 	m_IsPersistent = false;
 	m_SyncToClient = true;

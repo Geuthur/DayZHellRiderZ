@@ -1,6 +1,3 @@
-enum HRZ_SymptomIDs {
-	SYMPTOM_SHAKEHRZ = 1001
-};
 modded class SymptomManager
 {
 	override void Init()
