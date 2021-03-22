@@ -1,4 +1,4 @@
-class HRZ_ShakeMdfr: ModifierBase
+class HRZ_CrystalMdfr: ModifierBase
 {
 	int LIFETIME = 180;  //currently the same as the config
 	
