@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{B2E31EB375819585}DayZHellRiderZ/scripts/layouts/hrz_icons.edds"
+ Author "geuthur"
+ ChangeDate 1215982196
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "hrz_icons.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

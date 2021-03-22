@@ -1,0 +1,26 @@
+ImageSetClass {
+ Name "hrz_icons"
+ RefSize 512 256
+ Textures {
+  ImageSetTextureClass {
+   mpix 1
+   path "{52E3B13B9DACD77A}DayZHellRiderZ/scripts/layouts/hrz_icons.edds"
+  }
+ }
+ Images {
+  ImageSetDefClass hrz_mute {
+   Name "hrz_mute"
+   Pos 5 2
+   Size 212 256
+   Flags 0
+  }
+  ImageSetDefClass hrz_drug {
+   Name "hrz_drug"
+   Pos 266 0
+   Size 237 256
+   Flags 0
+  }
+ }
+ Groups {
+ }
+}
