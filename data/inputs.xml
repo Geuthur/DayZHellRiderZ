@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+
+	<!-- declarations -->
+	<inputs>
+		<actions>
+			<input name="UAHRZToggleMute" loc="Ohrenschutz An/Aus" />
+		</actions>
+
+	</inputs>
+
+	<!-- preset -->
+	<preset>
+		
+		<input name="UAHRZToggleMute">
+			<btn name="kN" />
+		</input>
+		
+	</preset>
+
+</modded_inputs>
