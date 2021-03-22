@@ -98,10 +98,6 @@ class HRZ_ActionJointSmokeSelf: ActionContinuousBase
 		
 		BlowSmoke( action_data );  
 		
-		if (joint) {
-			AddValueToJointValue(1);
-		}
-		
 		super.OnFinishProgressClient(action_data);
 	}
 
@@ -124,13 +120,12 @@ class HRZ_ActionJointSmokeSelf: ActionContinuousBase
 			{
 				if(action_data.m_MainItem && player)
 				{
+							ResetJointValues();
 							if( player.GetModifiersManager().IsModifierActive(HRZ_eModifiers.MDF_Stoned) ) { //effectively resets the timer
 								return;  //let previous modifier finish
 							}
 							// Kokain Trigger Symptom
 							player.GetModifiersManager().ActivateModifier(HRZ_eModifiers.MDF_Stoned);
-							Print("Aktiviert");
-							ResetJointValues();
 				}
 			}
 		}

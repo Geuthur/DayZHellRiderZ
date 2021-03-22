@@ -174,7 +174,9 @@ class HRZ_Cigarette_Base : ItemBase
 		} else {
 			SetBurningState(HRZ_CigaretteBurningState.NOT_BURNING);
 		}
-		DecreaseHealth(100);		
+        if (GetQuantity() <= 0 ) {
+			this.Delete();
+            }		
 		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // Client side
 		{
 			if (m_Light)

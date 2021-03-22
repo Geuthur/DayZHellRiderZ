@@ -3,7 +3,7 @@ class HRZ_StonedMdfr: ModifierBase
 	int LIFETIME = 360;  //currently the same as the config
 	
 	static const int CHANCE_OF_LAUGHTER = 50;
-	static const int CHANCE_OF_COUGH = 25;
+	static const int CHANCE_OF_COUGH = 15;
 	static const int WATER_DRAIN_WHILE_STONED = 2;
 	
 	float 			m_LastWaterLevel;
@@ -25,10 +25,12 @@ class HRZ_StonedMdfr: ModifierBase
 	
 	override protected void OnActivate(PlayerBase player)
 	{
+	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_CANNABIS);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
+	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_CANNABIS);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)
@@ -53,13 +55,14 @@ class HRZ_StonedMdfr: ModifierBase
 	override protected void OnTick(PlayerBase player, float deltaT)
 	{
 		int roll = Math.RandomInt(0, 100);	
+		int roll2 = Math.RandomInt(0, 100);	
 		if ( roll < CHANCE_OF_COUGH )
 		{
 			SymptomBase cough_symptom = player.GetSymptomManager().QueueUpPrimarySymptom(SymptomIDs.SYMPTOM_COUGH);
 			if (cough_symptom)
 				cough_symptom.SetDuration(5);
 			
-		} else if ( roll < CHANCE_OF_LAUGHTER )
+		} else if ( roll2 < CHANCE_OF_LAUGHTER )
 		{
 			SymptomBase laugh_symptom = player.GetSymptomManager().QueueUpPrimarySymptom(SymptomIDs.SYMPTOM_LAUGHTER);
 			if (laugh_symptom)
@@ -67,5 +70,7 @@ class HRZ_StonedMdfr: ModifierBase
 		}
 		if (player.GetStatWater().Get() > (WATER_DRAIN_WHILE_STONED))
 	 		player.GetStatWater().Add(-1 * WATER_DRAIN_WHILE_STONED);
+			float currentshock =  player.GetHealth("GlobalHealth", "Shock");
+			player.AddHealth("GlobalHealth", "Shock", WATER_DRAIN_WHILE_STONED * deltaT);
 	}
 };
