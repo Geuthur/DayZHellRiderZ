@@ -1,11 +1,5 @@
 class HRZ_CrystalSymptom extends SymptomBase
  {
-	Material matiColors = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/glow");
-	Material dynamic = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/dynamicblur");
-	Material radiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
-	Material rotiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/rotblur");
-	Material chromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
-	//settings
 	
   //this is just for the Symptom parameters set-up and is called even if the Symptom doesn't execute, don't put any gameplay code in here
   override void OnInit()
@@ -35,21 +29,14 @@ class HRZ_CrystalSymptom extends SymptomBase
         super.OnGetActivatedClient(player);
 
         Event_OnActivatedClient.Invoke(player, Type()); // pass player pointer and typename
+	
+		PPEffects.SetVignetteEffectValue(2, 3, 250, 127, 4, 0.2);
+		PPEffects.SetBloodSaturation(5);
 		
-		chromAbers.SetParam( "PowerX", 0.1 );
-		chromAbers.SetParam( "PowerY", 0.1 );
-
-		matiColors.SetParam("Saturation", 5.0 );
-		matiColors.SetParam("Vignette", 3.00);
-		matiColors.SetParam("VignetteColor", 0.80);
-
-		dynamic.SetParam("Blurriness", 20.0);
-
-		rotiBlur.SetParam("Power", 0.50 );
-		rotiBlur.SetParam("MinDepth", 2.50 );
-		rotiBlur.SetParam("MaxDepth", 10.0 );
-
-		radiBlur.SetParam("OffsetX", 0.76 );
+		HRZ_PPEffects.SetChromAbers(0.1, 0.1);
+		HRZ_PPEffects.SetCrystalDynamic(20.0);
+		HRZ_PPEffects.SetCrystalRotiBlur(0.50, 2.50, 10.0);
+		HRZ_PPEffects.SetCrystalRadialBlur(0, 0, 0.76, 0);
   }
   
   override void OnGetDeactivatedServer(PlayerBase player)
@@ -63,21 +50,10 @@ class HRZ_CrystalSymptom extends SymptomBase
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 
-		chromAbers.SetParam( "PowerX", 0.0 );
-		chromAbers.SetParam( "PowerY", 0.0 );
+		PPEffects.ResetVignettes();
+		PPEffects.SetBloodSaturation(1);
 
-		matiColors.SetParam("Saturation", 1.0 );
-		matiColors.SetParam("Vignette", 0.00);
-		matiColors.SetParam("VignetteColor", 0.0);
-		matiColors.SetParam("OverlayColor", 0 );
-		
-		dynamic.SetParam("Blurriness", 0.0);
-
-		rotiBlur.SetParam("Power", 0.00 );
-		rotiBlur.SetParam("MinDepth", 0.00 );
-		rotiBlur.SetParam("MaxDepth", 0.00);
-
-		radiBlur.SetParam("OffsetX", 0.00 );
+		HRZ_PPEffects.ResetAll();
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }

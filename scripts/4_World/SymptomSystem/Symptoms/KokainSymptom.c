@@ -1,17 +1,11 @@
 class HRZ_KokainSymptom extends SymptomBase
  {
+	
 	float m_BlurDuration;
 	float m_BlurStrength;
 	float m_EffectTime;
 	float m_EffectStartTime;
 	float m_Time;
-	
-	Material matiColors = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/glow");
-	Material dynamic = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/dynamicblur");
-	Material radiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
-	Material rotiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/rotblur");
-	Material chromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
-	
 	
 	const float BLUR_STRENGTH_MIN = 0.1;
 	const float BLUR_STRENGTH_MAX = 0.9;
@@ -38,20 +32,10 @@ class HRZ_KokainSymptom extends SymptomBase
   }
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
-  {
-		dynamic.SetParam("Blurriness", 10.0);
-
-		rotiBlur.SetParam("MinDepth", 1.0 );
-		rotiBlur.SetParam("MaxDepth", 2.0 );
-
-		radiBlur.SetParam("OffsetX", 0.76 );
-		
-		//chromAbers.SetParam( "PowerX", 0.1 );
-		//chromAbers.SetParam( "PowerY", 0.1 );
-
-		//matiColors.SetParam("Saturation", 1.0 );
-		//matiColors.SetParam("Vignette", 1.00);
-		//matiColors.SetParam("VignetteColor", 0.40);
+  {		
+		HRZ_PPEffects.SetKokainDynamic(10.0);
+		HRZ_PPEffects.SetKokainRotiBlur(0, 1.0, 2.0);
+		HRZ_PPEffects.SetCrystalRadialBlur(0, 0, 0.76, 0);
 		
 		m_Time += deltatime;
 		if( m_EffectStartTime <= 0 )
@@ -69,9 +53,9 @@ class HRZ_KokainSymptom extends SymptomBase
 			float cos_value = Math.Sin(m_EffectTime  * Math.PI);
 			float kokain = cos_value * m_BlurStrength;
 			//Print(kokain);
-			rotiBlur.SetParam("Power", kokain + 0.5 );
+			HRZ_PPEffects.SetKokainRotiBlur(kokain, 1.0, 2.0);
+			HRZ_PPEffects.UpdateRotiBlur();
 			
-			//PPEffects.SetTunnelVignette(kokain);
 			//PrintString("cos=" +cos_value.ToString());
 			GetGame().GetPlayer().GetCurrentCamera().SpawnCameraShake(kokain,5,4,2);
 			
@@ -105,22 +89,9 @@ class HRZ_KokainSymptom extends SymptomBase
         super.OnGetDeactivatedClient(player);
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
-
-		chromAbers.SetParam( "PowerX", 0.0 );
-		chromAbers.SetParam( "PowerY", 0.0 );
-
-		matiColors.SetParam("Saturation", 1.0 );
-		matiColors.SetParam("Vignette", 0.00);
-		matiColors.SetParam("VignetteColor", 0.0);
-		matiColors.SetParam("OverlayColor", 0 );
 		
-		dynamic.SetParam("Blurriness", 0.0);
-
-		rotiBlur.SetParam("Power", 0.00 );
-		rotiBlur.SetParam("MinDepth", 0.00 );
-		rotiBlur.SetParam("MaxDepth", 0.00);
-
-		radiBlur.SetParam("OffsetX", 0.00 );
+		HRZ_PPEffects.ResetAll();
+		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }
  };

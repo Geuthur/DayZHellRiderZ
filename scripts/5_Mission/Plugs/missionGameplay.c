@@ -5,6 +5,7 @@ modded class MissionGameplay extends MissionBase {
 
     private float HRZ_FadeTime = 0.5;
     private float HRZ_MuteFactor = 0.25;
+	private int HRZ_Symptoms;
 
     private UAInput HRZ_AutoMute;
     
@@ -12,14 +13,20 @@ modded class MissionGameplay extends MissionBase {
     void OnSymptomActivate(PlayerBase player, typename symptomType)
     {
 		IngameHud hud = IngameHud.Cast(GetHud());
-		hud.HRZ_SetDrugIcon(true);         
+		hud.HRZ_SetDrugIcon(true);
+		HRZ_Symptoms += 1;
+		Print (HRZ_Symptoms);
         Print("Symptom activated: " + symptomType.ToString());
     }
 	
     void OnSymptomDeactivate(PlayerBase player, typename symptomType)
     {
+		Print (HRZ_Symptoms);
+		HRZ_Symptoms -= 1;
+		if (HRZ_Symptoms < 1) {
 		IngameHud hud = IngameHud.Cast(GetHud());
-		hud.HRZ_SetDrugIcon(false);         
+		hud.HRZ_SetDrugIcon(false);     
+		}    
         Print("Symptom deactivated: " + symptomType.ToString());
     }
 	
@@ -37,7 +44,14 @@ modded class MissionGameplay extends MissionBase {
 		// SymptomBase
         SymptomBase.Event_OnActivatedClient.Remove(OnSymptomActivate); // unregister our method when mission is over
         SymptomBase.Event_OnDeactivatedClient.Remove(OnSymptomDeactivate); // unregister our method to recieve events
+		HRZ_PPEffects.ResetAll();
 	}    
+	
+	override void OnInit()
+	{
+		super.OnInit();
+		HRZ_PPEffects.Init();
+	}
 	
     override void OnUpdate( float timeslice )
 	{
@@ -81,5 +95,5 @@ modded class MissionGameplay extends MissionBase {
             hud.HRZ_SetMuteIcon(false);
         }
 		
-		}
+	}
 }

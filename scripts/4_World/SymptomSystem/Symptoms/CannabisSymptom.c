@@ -1,11 +1,5 @@
 class HRZ_CannabisSymptom extends SymptomBase
  {
-	Material matiColors = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/glow");
-	Material dynamic = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/dynamicblur");
-	Material radiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
-	Material rotiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/rotblur");
-	Material chromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
-	//settings
 	
   //this is just for the Symptom parameters set-up and is called even if the Symptom doesn't execute, don't put any gameplay code in here
   override void OnInit()
@@ -24,6 +18,8 @@ class HRZ_CannabisSymptom extends SymptomBase
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
   {
+		PPEffects.SetVignetteEffectValue(1, 0.88, 250, 127, 4, 0.2);
+		PPEffects.SetBloodSaturation(2);
   }
   
   override void OnGetActivatedServer(PlayerBase player)
@@ -35,10 +31,6 @@ class HRZ_CannabisSymptom extends SymptomBase
         super.OnGetActivatedClient(player);
 
         Event_OnActivatedClient.Invoke(player, Type()); // pass player pointer and typename
-		
-		matiColors.SetParam("Saturation", 2.0 );
-		matiColors.SetParam("Vignette", 0.88);
-		matiColors.SetParam("VignetteColor", 0.2);
   }
   
   override void OnGetDeactivatedServer(PlayerBase player)
@@ -51,11 +43,9 @@ class HRZ_CannabisSymptom extends SymptomBase
         super.OnGetDeactivatedClient(player);
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
-
-		//settings
-		matiColors.SetParam("Saturation", 1.0 );
-		matiColors.SetParam("Vignette", 0.00);
-		matiColors.SetParam("VignetteColor", 0.0);
+		
+		PPEffects.ResetVignettes();
+		PPEffects.SetBloodSaturation(1);
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }
