@@ -64,7 +64,7 @@ class HRZ_PPEffects extends PPEffects
 		m_MatRotiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/rotblur");
 		m_MatDynamic = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/dynamicblur");
 		m_MatChromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
-		m_MatRadialBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
+		m_MatRadialBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
 		
 		m_RotiBlurEffects = new array<int>;
 		m_RotiBlurValues = new map<int, ref array<float>>;
