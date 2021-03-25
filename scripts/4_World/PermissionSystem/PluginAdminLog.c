@@ -165,5 +165,41 @@ class HRZ_PluginAdminLog extends PluginAdminLog {
 			PrintLog(m_Log);
 		}
 	}
+	
+    void HRZ_PlayerKill(PlayerBase player, Object source)
+    {
+       		if ( player && source )
+			{
+			
+				if ( source.IsWeapon() || source.IsMeleeWeapon() )  // player
+				{				
+					m_Source = PlayerBase.Cast( EntityAI.Cast( source ).GetHierarchyParent() );
+					m_PlayerPrefix2 = "";
+					if (m_Source)
+					{
+						m_PlayerPrefix2 = this.GetPlayerPrefix( m_Source ,  m_Source.GetIdentity() );
+					}
+					
+					if ( source.IsMeleeWeapon() )
+					{	
+						m_Log = string.Format("\[HRZ] Killfeed " + m_PlayerPrefix + " killed by " + m_PlayerPrefix2 + " with " + source.GetDisplayName() );
+						PrintLog(m_Log);
+					}
+					else
+					{
+						m_Distance = vector.Distance( player.GetPosition(), m_Source.GetPosition() );
+						m_Log = string.Format("\[HRZ] Killfeed " + m_PlayerPrefix + " killed by " + m_PlayerPrefix2 + " with " + source.GetDisplayName() + " from " + m_Distance + " meters " );
+						PrintLog(m_Log);
+					}
+				}
+				else // others
+				{
+					//m_Log = string.Format("\[HRZ] Killfeed " + m_PlayerPrefix + " killed by " + source.GetType() );
+					//PrintLog(m_Log);
+				}
+	        		} else {
+				//LogPrint("DEBUG: PlayerKilled() player/source does not exist");
+			}	
+    }
 
 }
