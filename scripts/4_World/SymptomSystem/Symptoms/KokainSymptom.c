@@ -35,7 +35,7 @@ class HRZ_KokainSymptom extends SymptomBase
   {		
 		HRZ_PPEffects.SetKokainDynamic(10.0);
 		HRZ_PPEffects.SetKokainRotiBlur(0, 1.0, 2.0);
-		HRZ_PPEffects.SetCrystalRadialBlur(0, 0, 0.76, 0);
+		HRZ_PPEffects.SetKokainRadialBlur(0, 0, 0.76, 0);
 		
 		m_Time += deltatime;
 		if( m_EffectStartTime <= 0 )
