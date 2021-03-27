@@ -1,59 +1,35 @@
 class HRZ_PPEffects extends PPEffects
 {
-	
-	static int m_RotiBlurKokain;
-	static int m_RotiBlurCrystal;
-	
-	static int m_DynamicKokain;
-	static int m_DynamicCrystal;
-	
-	static int m_ChromAbersKokain;
-	static int m_ChromAbersCrystal;
-	
-	static int m_RadialBlurKokain;
-	static int m_RadialBlurCrystal;
-	
 	static Material m_MatRotiBlur;
 	static Material m_MatDynamic;
 	static Material m_MatChromAbers;
 	static Material m_MatRadialBlur;
 
-	static ref array<int> m_RotiBlurEffects;
-	static ref map<int, ref array<float>> m_RotiBlurValues;
+	static ref array<int> m_Effects;
+	static ref map<int, ref array<float>> m_EffectsValues;
 	
-	static ref array<float>> m_DynamicValues;
-	
-	static ref array<int> m_ChromAbersEffects;
-	static ref map<int, ref array<float>> m_ChromAbersValues;
-	
-	static ref array<int> m_RadialBlurEffects;
 	static ref map<int, ref array<float>> m_RadialBlurValues;
+	static ref map<int, ref array<float>> m_ChromAbersValues;
+	static ref map<int, ref array<float>> m_RotiBlurValues;
+	static ref map<int, ref array<float>> m_DynamicValues;
 	
 	override static void Init()
 	{
-		if ( m_RotiBlurEffects )
+		if ( m_Effects )
 		{
-			delete m_RotiBlurEffects;
-		}
-		if ( m_RotiBlurValues )
-		{
-			delete m_RotiBlurValues;
+			delete m_Effects;
 		}
 		if ( m_DynamicValues )
 		{
 			delete m_DynamicValues;
 		}
-		if ( m_ChromAbersEffects )
+		if ( m_RotiBlurValues )
 		{
-			delete m_ChromAbersEffects;
+			delete m_RotiBlurValues;
 		}
 		if ( m_ChromAbersValues )
 		{
 			delete m_ChromAbersValues;
-		}
-		if ( m_RadialBlurEffects )
-		{
-			delete m_RadialBlurEffects;
 		}
 		if ( m_RadialBlurValues )
 		{
@@ -66,46 +42,48 @@ class HRZ_PPEffects extends PPEffects
 		m_MatChromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
 		m_MatRadialBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
 		
-		m_RotiBlurEffects = new array<int>;
 		m_RotiBlurValues = new map<int, ref array<float>>;
-		
-		m_ChromAbersEffects = new array<int>;
 		m_ChromAbersValues = new map<int, ref array<float>>;
-		
-		m_RadialBlurEffects = new array<int>;
 		m_RadialBlurValues = new map<int, ref array<float>>;
+		m_DynamicValues = new map<int, ref array<float>>;
 		
-		m_DynamicValues = new array<float>;
+		m_Effects = new array<int>;
+		m_EffectsValues = new map<int, ref array<float>>;
 		
-		m_RotiBlurKokain 		= RegisterRotiBlurEffect();
-		m_RotiBlurCrystal 		= RegisterRotiBlurEffect();
-		
-		m_DynamicKokain 		= RegisterDynamicEffect();
-		m_DynamicCrystal 		= RegisterDynamicEffect();
-		
-		m_ChromAbersKokain 		= RegisterChromAbersEffect();
-		m_ChromAbersCrystal 	= RegisterChromAbersEffect();
-		
-		m_RadialBlurKokain 		= RegisterRadialBlurEffect();
-		m_RadialBlurCrystal 	= RegisterRadialBlurEffect();
-		
-	}
-
-	static int RegisterRotiBlurEffect()
-	{
-		return m_RotiBlurEffects.Insert(0);
-	}
-
-	static void SetKokainRotiBlur(float Power, float MinDepth, float MaxDepth)
-	{
-		SetRotiBlurEffectValue(m_RotiBlurKokain, Power, MinDepth, MaxDepth);
-		UpdateRotiBlur();
+		RegisterEffect(HRZ_EffectID.Kokain);
+		RegisterEffect(HRZ_EffectID.Crystal);
+		RegisterEffect(HRZ_EffectID.Cannabis);
+		RegisterEffect(HRZ_EffectID.Blur);
 	}
 	
-	static void SetCrystalRotiBlur(float Power, float MinDepth, float MaxDepth)
+	//-------------------------------------------------------
+	// Pulsing Effect
+	//-------------------------------------------------------
+	
+	
+	static void PulsingRadialEffect(int effectID, float deltatime)
 	{
-		SetRotiBlurEffectValue(m_RotiBlurCrystal, Power, MinDepth, MaxDepth);
-		UpdateRotiBlur();
+		const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
+		const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
+		float 							m_Pulse; //Lerp result
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, deltatime);
+		
+		SetRadialBlurEffectValue(effectID, m_Pulse, m_Pulse, 0, 0);
+		UpdateRadialBlur();
+	}	
+
+	static void RegisterEffect(int neweffect)
+	{
+		if( m_EffectsValues.Contains(neweffect) )
+		{
+			Print("EffectManager" + neweffect + "already registered !");
+			Print (m_Effects.Count());
+			//Error("EffectManager" + neweffect + "already registered !");
+			return;
+		}
+		Print (m_Effects.Count());
+		m_Effects.Insert(neweffect);
 	}
 	
 	/*!
@@ -123,7 +101,7 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void SetRotiBlurEffectValue(int index, float power, float mindepth, float maxdepth)
 	{
-		if ( index < m_RotiBlurEffects.Count() )
+		if ( index < m_Effects.Count() )
 		{
 			ref array<float> values = {power,mindepth,maxdepth};
 			
@@ -133,6 +111,7 @@ class HRZ_PPEffects extends PPEffects
 		{
 			Print("Error: HRZ_PPEffects: m_RotiBlurValues with index: "+ index +" is not registered.");
 		}
+		UpdateRotiBlur();
 	}
 	
 	static void ResetRotiBlurs()
@@ -159,9 +138,9 @@ class HRZ_PPEffects extends PPEffects
 		float MinDepth_value_total = 0; //use just the highest?
 		float MaxDepth_value_total = 0; //use just the highest?
 		
-		if( m_RotiBlurEffects )
+		if( m_Effects )
 		{
-			for ( int i = 0; i < m_RotiBlurEffects.Count(); ++i )
+			for ( int i = 0; i < m_Effects.Count(); ++i )
 			{
 				if (m_RotiBlurValues.Get(i))
 				{
@@ -188,30 +167,15 @@ class HRZ_PPEffects extends PPEffects
 	// Roti BLUR END
 	//-------------------------------------------------------
 	
-	static int RegisterDynamicEffect()
-	{
-		return m_DynamicValues.Insert(0);
-	}
-
-	static void SetKokainDynamic(float Power)
-	{
-		SetDynamicEffectValue(m_DynamicKokain, Power);
-		UpdateDynamic();
-	}
-	
-	static void SetCrystalDynamic(float Power)
-	{
-		SetDynamicEffectValue(m_DynamicCrystal, Power);
-		UpdateDynamic();
-	}
-	
 	static void ResetDynamics()
 	{
 		if( m_DynamicValues )
 		{
 			for ( int i = 0; i < m_DynamicValues.Count(); ++i )
 			{
-				m_DynamicValues[i] = 0;
+				ref array<float> values = {0};
+				
+				m_DynamicValues.Set(i, values);
 			}
 			UpdateDynamic();
 		}
@@ -219,14 +183,17 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void SetDynamicEffectValue(int index, float value)
 	{
-		if ( m_DynamicValues && index < m_DynamicValues.Count() )
+		if ( index < m_Effects.Count() )
 		{
-			m_DynamicValues[index] = value;
+			ref array<float> values = {value};
+			
+			m_DynamicValues.Set(index, values);
 		}
 		else
 		{
 			Print("Error: HRZ_PPEffects: m_DynamicValues with index: "+ index +" is not registered.");
 		}
+	UpdateDynamic();
 	}
 	
 	/*!
@@ -241,12 +208,22 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void UpdateDynamic()
 	{
+		float Power;
+		
 		float Power_value_total = 0;
 		if( m_DynamicValues )
 		{
-			for ( int i = 0; i < m_DynamicValues.Count(); ++i )
+			for ( int i = 0; i < m_Effects.Count(); ++i )
 			{
-				Power_value_total += m_DynamicValues[i];
+				if (m_DynamicValues.Get(i))
+				{
+				Power = m_DynamicValues.Get(i).Get(0);
+				Power_value_total += Power;
+				}
+				else
+				{
+					//Print("no m_DynamicValues");
+				}
 			}
 		}
 		
@@ -256,24 +233,7 @@ class HRZ_PPEffects extends PPEffects
 	//-------------------------------------------------------
 	// Dynamic BLUR END
 	//-------------------------------------------------------
-	
-	static int RegisterChromAbersEffect()
-	{
-		return m_ChromAbersEffects.Insert(0);
-	}
-
-	static void SetKokainChromAbers(float PowerX, float PowerY)
-	{
-		SetChromAbersEffectValue(m_ChromAbersKokain, PowerX, PowerY);
-		UpdateChromAbers();
-	}
-	
-	static void SetCrystalChromAbers(float PowerX, float PowerY)
-	{
-		SetChromAbersEffectValue(m_ChromAbersCrystal, PowerX, PowerY);
-		UpdateChromAbers();
-	}
-	
+		
 	static void ResetChromAbers()
 	{
 		if( m_ChromAbersValues )
@@ -290,7 +250,7 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void SetChromAbersEffectValue(int index, float powerx, float powery)
 	{
-		if ( index < m_ChromAbersEffects.Count() )
+		if ( index < m_Effects.Count() )
 		{
 			ref array<float> values = {powerx,powery};
 			
@@ -300,6 +260,7 @@ class HRZ_PPEffects extends PPEffects
 		{
 			Print("Error: HRZ_PPEffects: m_ChromAbersValues with index: "+ index +" is not registered.");
 		}
+	UpdateChromAbers();
 	}
 	
 	/*!
@@ -321,9 +282,9 @@ class HRZ_PPEffects extends PPEffects
 		float PowerX_value_total = 0;
 		float PowerY_value_total = 0;
 		
-		if( m_ChromAbersEffects )
+		if( m_Effects )
 		{
-			for ( int i = 0; i < m_ChromAbersEffects.Count(); ++i )
+			for ( int i = 0; i < m_Effects.Count(); ++i )
 			{
 				if (m_ChromAbersValues.Get(i))
 				{
@@ -347,23 +308,6 @@ class HRZ_PPEffects extends PPEffects
 	// ChromAbbs END
 	//-------------------------------------------------------
 	
-	static int RegisterRadialBlurEffect()
-	{
-		return m_RadialBlurEffects.Insert(0);
-	}
-
-	static void SetKokainRadialBlur(float PowerX, float PowerY, float OffsetX, float OffsetY)
-	{
-		SetRadialBlurEffectValue(m_RadialBlurKokain, PowerX, PowerY, OffsetX, OffsetY);
-		UpdateRadialBlur();
-	}
-	
-	static void SetCrystalRadialBlur(float PowerX, float PowerY, float OffsetX, float OffsetY)
-	{
-		SetRadialBlurEffectValue(m_RadialBlurCrystal, PowerX, PowerY, OffsetX, OffsetY);
-		UpdateRadialBlur();
-	}
-	
 	static void ResetRadialBlur()
 	{
 		if( m_RadialBlurValues )
@@ -380,7 +324,8 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void SetRadialBlurEffectValue(int index, float powerx, float powery, float offsetx, float offsety)
 	{
-		if ( index < m_RadialBlurEffects.Count() )
+		//Print (m_Effects.Count());
+		if ( index < m_Effects.Count() )
 		{
 			ref array<float> values = {powerx,powery,offsetx,offsety};
 			
@@ -390,6 +335,7 @@ class HRZ_PPEffects extends PPEffects
 		{
 			Print("Error: HRZ_PPEffects: m_RadialBlurValues with index: "+ index +" is not registered.");
 		}
+	UpdateRadialBlur();
 	}
 	
 	/*!
@@ -405,6 +351,34 @@ class HRZ_PPEffects extends PPEffects
 		m_MatRadialBlur.SetParam("OffsetY", OffsetY);
 	}
 	
+	static float Bobbing(float period, float amplitude, float elapsedTime)
+	{
+		//Prevent division by 0
+		if ( period == 0 )
+			period = 1;
+		
+		elapsedTime /= period;
+		
+		float cycle;
+		cycle += elapsedTime;
+		cycle = FModulus(cycle, 360);
+		cycle = Math.Sin(cycle) * amplitude;
+		
+		return cycle;
+	}
+	
+	static float FModulus(float x, float y)
+	{
+		float res;
+		//Prevent division by 0
+		if (y == 0)
+			y = 1;
+		
+		int n = Math.Floor(x/y);
+		res = x - n * y;
+		return res;
+	}
+	
 	static void UpdateRadialBlur()
 	{
 		float PowerX;
@@ -417,9 +391,9 @@ class HRZ_PPEffects extends PPEffects
 		float OffsetX_value_total = 0;
 		float OffsetY_value_total = 0;
 		
-		if( m_RadialBlurEffects )
+		if( m_Effects )
 		{
-			for ( int i = 0; i < m_RadialBlurEffects.Count(); ++i )
+			for ( int i = 0; i < m_Effects.Count(); ++i )
 			{
 				if (m_RadialBlurValues.Get(i))
 				{
@@ -446,7 +420,7 @@ class HRZ_PPEffects extends PPEffects
 	//-------------------------------------------------------
 	// Radial BLUR END
 	//-------------------------------------------------------
-	
+
 	override static void ResetAll()
 	{
 		ResetRotiBlurs();
