@@ -1,9 +1,26 @@
+/**
+ * HRZ_PPEffects.c
+ *
+ * DayZ Hell-RiderZ Mod
+ * www.hell-rider.de
+ * © 2021 DayZ Hell-RiderZ Team
+ *
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
+ *
+*/
+
 class HRZ_PPEffects extends PPEffects
 {
+	// COLORIZE IDs
+	static const int COLORIZE_FG = 100;
+	
 	static Material m_MatRotiBlur;
 	static Material m_MatDynamic;
 	static Material m_MatChromAbers;
 	static Material m_MatRadialBlur;
+	static Material m_matHDR;
+	static Material m_glow;
 
 	static ref array<int> m_Effects;
 	static ref map<int, ref array<float>> m_EffectsValues;
@@ -12,6 +29,8 @@ class HRZ_PPEffects extends PPEffects
 	static ref map<int, ref array<float>> m_ChromAbersValues;
 	static ref map<int, ref array<float>> m_RotiBlurValues;
 	static ref map<int, ref array<float>> m_DynamicValues;
+	static ref map<int, ref array<float>> m_HRZVignetteValues;
+	static ref map<int, ref array<float>> m_GrainValues;
 	
 	override static void Init()
 	{
@@ -35,17 +54,28 @@ class HRZ_PPEffects extends PPEffects
 		{
 			delete m_RadialBlurValues;
 		}
+		if ( m_HRZVignetteValues )
+		{
+			delete m_HRZVignetteValues;
+		}
+		if ( m_GrainValues )
+		{
+			delete m_GrainValues;
+		}
 		
-		
+		m_MatColors = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/glow");
 		m_MatRotiBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/rotblur");
 		m_MatDynamic = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/dynamicblur");
 		m_MatChromAbers = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/chromaber");
 		m_MatRadialBlur = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/radialblur");
+		m_matHDR = GetGame().GetWorld().GetMaterial("graphics/materials/postprocess/filmgrainNV");
 		
 		m_RotiBlurValues = new map<int, ref array<float>>;
 		m_ChromAbersValues = new map<int, ref array<float>>;
 		m_RadialBlurValues = new map<int, ref array<float>>;
 		m_DynamicValues = new map<int, ref array<float>>;
+		m_HRZVignetteValues = new map<int, ref array<float>>;
+		m_GrainValues = new map<int, ref array<float>>;
 		
 		m_Effects = new array<int>;
 		m_EffectsValues = new map<int, ref array<float>>;
@@ -54,36 +84,218 @@ class HRZ_PPEffects extends PPEffects
 		RegisterEffect(HRZ_EffectID.Crystal);
 		RegisterEffect(HRZ_EffectID.Cannabis);
 		RegisterEffect(HRZ_EffectID.Blur);
+		RegisterEffect(HRZ_EffectID.Test);
 	}
 	
-	//-------------------------------------------------------
-	// Pulsing Effect
-	//-------------------------------------------------------
-	
-	
-	static void PulsingRadialEffect(int effectID, float deltatime)
-	{
-		const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
-		const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
-		float 							m_Pulse; //Lerp result
-		
-		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, deltatime);
-		
-		SetRadialBlurEffectValue(effectID, m_Pulse, m_Pulse, 0, 0);
-		UpdateRadialBlur();
-	}	
-
 	static void RegisterEffect(int neweffect)
 	{
 		if( m_EffectsValues.Contains(neweffect) )
 		{
 			Print("EffectManager" + neweffect + "already registered !");
-			Print (m_Effects.Count());
-			//Error("EffectManager" + neweffect + "already registered !");
 			return;
 		}
 		Print (m_Effects.Count());
 		m_Effects.Insert(neweffect);
+	}
+	
+	static float Bobbing(float period, float amplitude, float elapsedTime)
+	{
+		//Prevent division by 0
+		if ( period == 0 )
+			period = 1;
+		
+		elapsedTime /= period;
+		
+		float cycle;
+		cycle += elapsedTime;
+		cycle = FModulus(cycle, 360);
+		cycle = Math.Sin(cycle) * amplitude;
+		
+		return cycle;
+	}
+	
+	static float FModulus(float x, float y)
+	{
+		float res;
+		//Prevent division by 0
+		if (y == 0)
+			y = 1;
+		
+		int n = Math.Floor(x/y);
+		res = x - n * y;
+		return res;
+	}
+	
+	//-------------------------------------------------------
+	// Pulsing Effects
+	//-------------------------------------------------------
+	private static float					m_PulseTimer; // Speed of Pulsing Between 0-1
+	private static bool 					m_PulseActive;
+	private static float 					m_CrazyPulseTimer; // Speed of Pulsing Between 0-1
+	private static bool 					m_CrazyPulseActive;
+	
+	static void PulsingRadialEffect(int effectID, float deltatime)
+	{
+		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
+		private const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
+		private float 							m_Pulse; //Lerp result
+		m_PulseActive = true;
+		
+		if (deltatime > 1)
+		deltatime = 1;
+		
+		m_PulseTimer += deltatime;
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_PulseTimer * 0.01));
+		
+		SetRadialBlurEffectValue(effectID, m_Pulse, m_Pulse, 0, 0);
+		UpdateRadialBlur();
+	}	
+	
+	static void CrazyPulsingRadialEffect(int effectID, float deltatime)
+	{
+		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
+		private const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
+		private float 							m_Pulse; //Pulse result
+		m_CrazyPulseActive = true;
+		
+		if (deltatime > 1)
+		deltatime = 1;
+		
+		m_CrazyPulseTimer += deltatime;
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_CrazyPulseTimer * 0.01));
+		
+		SetRadialBlurEffectValue(effectID, m_Pulse, m_Pulse, 0, 0);
+		
+		UpdateRadialBlur();
+		
+		PPEffects.SetBloodSaturation(5);
+		HRZ_PPEffects.SetColorizationNV(m_Pulse,m_Pulse,m_Pulse);
+	}
+	
+	//-------------------------------------------------------
+	// Abstract Effects Beta
+	//-------------------------------------------------------
+	private static float 					m_DarkPulseTimer; // Speed of Pulsing Between 0-1
+	private static bool 					m_DarkPulseActive;
+	private static float 					m_WabblePulseTimer; // Speed of Pulsing Between 0-1
+	private static bool 					m_WabblePulseActive;
+	
+	static void DarkWorldEffect(int effectID, float deltatime)
+	{
+		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
+		private const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
+		private float 							m_Pulse; //Pulse result
+		m_DarkPulseActive = true;
+		
+		if (deltatime > 1)
+		deltatime = 1;
+		
+		m_DarkPulseTimer += deltatime;
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_DarkPulseTimer * 0.01));
+		//Print (m_Pulse);
+		PPEffects.SetBloodSaturation(5);
+		HRZ_PPEffects.SetColorizationNV(-1,-1,-1);
+		//HRZ_PPEffects.SetGrainEffectValue(effectID, m_Pulse,m_Pulse,m_Pulse);
+	}
+	
+	static void WabbleEffect(int effectID, float deltatime)
+	{
+		private const float 					PULSE_PERIOD = 1; //The time it takes for pulse to do a full cycle
+		private const float 					PULSE_AMPLITUDE = 0.01; //This is a multiplier, keep below 1 or expect the unexpected
+		private float 							m_Pulse; //Pulse result
+		m_WabblePulseActive = true;
+		
+		if (deltatime > 1)
+		deltatime = 1;
+		
+		m_WabblePulseTimer += deltatime;
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_WabblePulseTimer * 0.01));
+		//Print (m_WabblePulseTimer);
+		HRZ_PPEffects.SetFilmGrain(0,m_Pulse,m_Pulse,6);
+	}
+	
+	/*!
+	set vignette
+	\param intensity <0, 1>, intensity of effect, 0 = disable
+	\param R
+	\param G
+	\param B
+	*/
+	static void HRZ_SetVignette(float intensity, float R, float G, float B, float A)
+	{
+		//Material matHDR = GetGame().GetWorld().GetMaterial("Graphics/Materials/postprocess/glow");
+
+		float color[4];
+		color[0] = R;
+		color[1] = G;
+		color[2] = B;
+		color[3] = A;
+
+		m_MatColors.SetParam("Vignette", intensity);
+		m_MatColors.SetParam("VignetteColor", color);
+	}
+	
+	static void HRZ_SetVignetteEffectValue(int index, float intensity, float r, float g, float b, float a)
+	{
+		if ( index < m_Effects.Count() )
+		{
+			ref array<float> values = {intensity,r,g,b,a};
+			
+			m_HRZVignetteValues.Set(index, values);
+		}
+		else
+		{
+			Print("Error: PPEffects: m_EffectsValues with index: "+ index +" is not registered.");
+		}
+		HRZ_UpdateVignette();
+	}
+	
+	static void HRZ_ResetVignettes()
+	{
+		if( m_HRZVignetteValues )
+		{
+			for ( int i = 0; i < m_HRZVignetteValues.Count(); ++i )
+			{
+				ref array<float> values = {0,0,0,0,0};
+			
+				m_HRZVignetteValues.Set(i, values);
+			}
+			HRZ_UpdateVignette();
+		}
+	}
+	
+	static void HRZ_UpdateVignette()
+	{
+		float color[4];
+		float intesity;
+		
+		float intensity_value_total = 0; //use just the highest?
+		if( m_Effects )
+		{
+			for ( int i = 0; i < m_Effects.Count(); ++i )
+			{
+				if (m_HRZVignetteValues.Get(i))
+				{
+					color[0] = m_HRZVignetteValues.Get(i).Get(1); //red
+					color[1] = m_HRZVignetteValues.Get(i).Get(2); //green
+					color[2] = m_HRZVignetteValues.Get(i).Get(3); //blue
+					color[3] = m_HRZVignetteValues.Get(i).Get(4); //alpha
+					
+					intesity = m_HRZVignetteValues.Get(i).Get(0);
+					intensity_value_total += intesity;
+				}
+				else
+				{
+					//Print("no m_HRZVignetteValues");
+				}
+			}
+		}
+		
+		HRZ_SetVignette( intensity_value_total, color[0], color[1], color[2], color[3] );
 	}
 	
 	/*!
@@ -98,6 +310,7 @@ class HRZ_PPEffects extends PPEffects
 		m_MatRotiBlur.SetParam("MinDepth", MinDepth);
 		m_MatRotiBlur.SetParam("MaxDepth", MaxDepth);
 	}
+	
 	
 	static void SetRotiBlurEffectValue(int index, float power, float mindepth, float maxdepth)
 	{
@@ -319,6 +532,15 @@ class HRZ_PPEffects extends PPEffects
 				m_RadialBlurValues.Set(i, values);
 			}
 			UpdateRadialBlur();
+			if (m_PulseActive)
+			{
+				m_PulseActive = false;
+				m_PulseTimer = 0;
+			} else if (m_CrazyPulseActive) 
+			{
+				m_CrazyPulseActive = false;
+				m_CrazyPulseTimer = 0;
+			}
 		}
 	}
 	
@@ -349,34 +571,6 @@ class HRZ_PPEffects extends PPEffects
 		m_MatRadialBlur.SetParam("PowerY", PowerY);
 		m_MatRadialBlur.SetParam("OffsetX", OffsetX);
 		m_MatRadialBlur.SetParam("OffsetY", OffsetY);
-	}
-	
-	static float Bobbing(float period, float amplitude, float elapsedTime)
-	{
-		//Prevent division by 0
-		if ( period == 0 )
-			period = 1;
-		
-		elapsedTime /= period;
-		
-		float cycle;
-		cycle += elapsedTime;
-		cycle = FModulus(cycle, 360);
-		cycle = Math.Sin(cycle) * amplitude;
-		
-		return cycle;
-	}
-	
-	static float FModulus(float x, float y)
-	{
-		float res;
-		//Prevent division by 0
-		if (y == 0)
-			y = 1;
-		
-		int n = Math.Floor(x/y);
-		res = x - n * y;
-		return res;
 	}
 	
 	static void UpdateRadialBlur()
@@ -421,11 +615,106 @@ class HRZ_PPEffects extends PPEffects
 	// Radial BLUR END
 	//-------------------------------------------------------
 
+	// appropriate parts of the code will call these functions
+	static void SetColorizationFG(float R, float G, float B, float A)
+	{
+		float color[4];
+		color[0] = R;
+		color[1] = G;
+		color[2] = B;
+		color[3] = A;
+		
+		Print(color);
+		m_MatColors.SetParam("ColorizationColor", color);
+		UpdateColorFG();
+	}
+
+	static void SetGrainEffectValue(int index, float r, float g, float b)
+	{
+		if ( index < m_Effects.Count() )
+		{
+			ref array<float> values = {r,g,b};
+			
+			m_GrainValues.Set(index, values);
+		}
+		else
+		{
+			Print("Error: PPEffects: m_GrainValues with index: "+ index +" is not registered.");
+		}
+		UpdateColorFG();
+	}
+	
+	static void UpdateColorFG()
+	{
+		float color[4];
+		
+		if( m_Effects )
+		{
+			for ( int i = 0; i < m_Effects.Count(); ++i )
+			{
+				if (m_GrainValues.Get(i))
+				{
+					color[0] = m_GrainValues.Get(i).Get(1); //red
+					color[1] = m_GrainValues.Get(i).Get(2); //green
+					color[2] = m_GrainValues.Get(i).Get(3); //blue
+					color[3] = 0;
+				}
+				else
+				{
+					//Print("no m_HRZVignetteValues");
+				}
+			}
+		}
+		
+		m_MatColors.SetParam("ColorizationColor", color);
+	}
+	
+	static void ResetColor()
+	{
+		float color[4];
+		color[0] = 1.0;
+		color[1] = 1.0;
+		color[2] = 1.0;
+		color[3] = 0;
+        m_MatColors.SetParam("ColorizationColor", color);
+		if (m_DarkPulseActive)
+			{
+				m_DarkPulseActive = false;
+				m_DarkPulseTimer = 0;
+		}
+	}
+	
+	// light multiplier and noise intensity (using filmgrainNV.emat!) for nvg
+	// added other parameters for filmgrainNV.emat, sharpness and grain size
+	static void SetFilmGrain(float light_mult, float noise_intensity, float sharpness, float grain_size)
+	{
+		
+		g_Game.NightVissionLightParams(light_mult, noise_intensity);
+		m_matHDR.SetParam("Sharpness", sharpness);
+		m_matHDR.SetParam("GrainSize", grain_size);
+	}
+	
+	static void ResetFilmGrain()
+	{
+		g_Game.NightVissionLightParams(0, 0);
+		m_matHDR.SetParam("Sharpness", 0);
+		m_matHDR.SetParam("GrainSize", 0);
+		if (m_WabblePulseActive)
+			{
+				m_WabblePulseActive = false;
+				m_WabblePulseTimer = 0;
+		}
+	}
+	
 	override static void ResetAll()
 	{
 		ResetRotiBlurs();
 		ResetDynamics();
 		ResetChromAbers();
 		ResetRadialBlur();
+		HRZ_ResetVignettes();
+		ResetColorize();
+		ResetColor();
+		ResetFilmGrain();
 	}
 };
