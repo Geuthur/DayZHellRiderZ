@@ -254,16 +254,14 @@ class HRZ_PPEffects extends PPEffects
 		HRZ_UpdateVignette();
 	}
 	
-	static void HRZ_ResetVignettes()
+	static void HRZ_ResetVignettes(int neweffect)
 	{
 		if( m_HRZVignetteValues )
 		{
-			for ( int i = 0; i < m_HRZVignetteValues.Count(); ++i )
-			{
 				ref array<float> values = {0,0,0,0,0};
 			
-				m_HRZVignetteValues.Set(i, values);
-			}
+				m_HRZVignetteValues.Set(neweffect, values);
+			
 			HRZ_UpdateVignette();
 		}
 	}
@@ -327,16 +325,13 @@ class HRZ_PPEffects extends PPEffects
 		UpdateRotiBlur();
 	}
 	
-	static void ResetRotiBlurs()
+	static void ResetRotiBlurs(int neweffect)
 	{
 		if( m_RotiBlurValues )
 		{
-			for ( int i = 0; i < m_RotiBlurValues.Count(); ++i )
-			{
 				ref array<float> values = {0,0,0};
 			
-				m_RotiBlurValues.Set(i, values);
-			}
+				m_RotiBlurValues.Set(neweffect, values);
 			UpdateRotiBlur();
 		}
 	}
@@ -380,16 +375,13 @@ class HRZ_PPEffects extends PPEffects
 	// Roti BLUR END
 	//-------------------------------------------------------
 	
-	static void ResetDynamics()
+	static void ResetDynamics(int neweffect)
 	{
 		if( m_DynamicValues )
 		{
-			for ( int i = 0; i < m_DynamicValues.Count(); ++i )
-			{
 				ref array<float> values = {0};
 				
-				m_DynamicValues.Set(i, values);
-			}
+				m_DynamicValues.Set(neweffect, values);
 			UpdateDynamic();
 		}
 	}
@@ -447,16 +439,14 @@ class HRZ_PPEffects extends PPEffects
 	// Dynamic BLUR END
 	//-------------------------------------------------------
 		
-	static void ResetChromAbers()
+	static void ResetChromAbers(int neweffect)
 	{
 		if( m_ChromAbersValues )
 		{
-			for ( int i = 0; i < m_ChromAbersValues.Count(); ++i )
-			{
 				ref array<float> values = {0,0};
 			
-				m_ChromAbersValues.Set(i, values);
-			}
+				m_ChromAbersValues.Set(neweffect, values);
+			
 			UpdateChromAbers();
 		}
 	}
@@ -501,11 +491,14 @@ class HRZ_PPEffects extends PPEffects
 			{
 				if (m_ChromAbersValues.Get(i))
 				{
+				Print (m_ChromAbersValues.Get(i));
 				PowerX = m_ChromAbersValues.Get(i).Get(0);
 				PowerY = m_ChromAbersValues.Get(i).Get(0);
 					
 				PowerX_value_total += PowerX;
 				PowerY_value_total += PowerY;
+				Print (PowerY_value_total);
+				Print (PowerX_value_total);
 				}
 				else
 				{
@@ -521,16 +514,14 @@ class HRZ_PPEffects extends PPEffects
 	// ChromAbbs END
 	//-------------------------------------------------------
 	
-	static void ResetRadialBlur()
+	static void ResetRadialBlur(int neweffect)
 	{
 		if( m_RadialBlurValues )
 		{
-			for ( int i = 0; i < m_RadialBlurValues.Count(); ++i )
-			{
 				ref array<float> values = {0,0,0,0};
 			
-				m_RadialBlurValues.Set(i, values);
-			}
+				m_RadialBlurValues.Set(neweffect, values);
+			
 			UpdateRadialBlur();
 			if (m_PulseActive)
 			{
@@ -615,6 +606,7 @@ class HRZ_PPEffects extends PPEffects
 	// Radial BLUR END
 	//-------------------------------------------------------
 
+	/*
 	// appropriate parts of the code will call these functions
 	static void SetColorizationFG(float R, float G, float B, float A)
 	{
@@ -683,7 +675,7 @@ class HRZ_PPEffects extends PPEffects
 				m_DarkPulseTimer = 0;
 		}
 	}
-	
+	*/
 	// light multiplier and noise intensity (using filmgrainNV.emat!) for nvg
 	// added other parameters for filmgrainNV.emat, sharpness and grain size
 	static void SetFilmGrain(float light_mult, float noise_intensity, float sharpness, float grain_size)
@@ -706,15 +698,16 @@ class HRZ_PPEffects extends PPEffects
 		}
 	}
 	
-	override static void ResetAll()
+	static void ResetAllEffects(int neweffect)
 	{
-		ResetRotiBlurs();
-		ResetDynamics();
-		ResetChromAbers();
-		ResetRadialBlur();
-		HRZ_ResetVignettes();
+		ResetRotiBlurs(neweffect);
+		ResetDynamics(neweffect);
+		ResetChromAbers(neweffect);
+		ResetRadialBlur(neweffect);
+		HRZ_ResetVignettes(neweffect);
 		ResetColorize();
-		ResetColor();
+		//ResetColor();
 		ResetFilmGrain();
+		SetBloodSaturation(1);
 	}
 };
