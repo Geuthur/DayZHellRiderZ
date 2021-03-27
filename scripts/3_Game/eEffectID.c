@@ -4,4 +4,5 @@ enum HRZ_EffectID
 	Crystal,
 	Cannabis,
 	Blur,
+	Test
 }
