@@ -1,6 +1,6 @@
 class HRZ_CannabisSymptom extends SymptomBase
  {
-	
+
   //this is just for the Symptom parameters set-up and is called even if the Symptom doesn't execute, don't put any gameplay code in here
   override void OnInit()
   {
@@ -18,6 +18,7 @@ class HRZ_CannabisSymptom extends SymptomBase
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
   {
+		
 		PPEffects.SetVignetteEffectValue(1, 0.88, 250, 127, 4, 0.2);
 		PPEffects.SetBloodSaturation(2);
   }
