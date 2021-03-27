@@ -1,17 +1,15 @@
 class HRZ_TestMdfr : ModifierBase
 {
-	int LIFETIME = 180;  //currently the same as the config
+	int LIFETIME = 30;  //currently the same as the config
 	float m_Time;
-	
-	static const int CHANCE_OF_VOMIT = 1;
-	
+
 	ref HumanMovementState		m_MovementState	= new HumanMovementState();
 
 	override void Init()
 	{
 		m_TrackActivatedTime	= true;
 		m_IsPersistent 		= false;
-		m_ID 				= 105;
+		m_ID 				= HRZ_eModifiers.MDF_Test;
 		m_TickIntervalInactive 	= DEFAULT_TICK_TIME_INACTIVE;
 		m_TickIntervalActive 	= 10;
 	}
@@ -23,12 +21,12 @@ class HRZ_TestMdfr : ModifierBase
 
 	override protected void OnActivate(PlayerBase player)
 	{
-	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
+	player.GetSymptomManager().QueueUpSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_TEST);
 	}
 	
 	override protected void OnDeactivate(PlayerBase player)
 	{
-	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_KOKAIN);
+	player.GetSymptomManager().RemoveSecondarySymptom(HRZ_SymptomIDs.SYMPTOM_TEST);
 	}
 	
 	override bool ActivateCondition(PlayerBase player)
