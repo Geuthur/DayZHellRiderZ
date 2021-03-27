@@ -55,8 +55,8 @@ class HRZ_CrystalSymptom extends SymptomBase
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 
-		HRZ_PPEffects.ResetAll();
-		PPEffects.ResetAll();
+		HRZ_PPEffects.ResetAllEffects(HRZ_EffectID.Crystal);
+		//PPEffects.ResetAll();
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }
