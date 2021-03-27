@@ -4,5 +4,6 @@ enum HRZ_eModifiers {
  MDF_Vomit,
  MDF_Crystal,
  MDF_Kokain,
+ MDF_Blur,
  MDF_Test
 }
