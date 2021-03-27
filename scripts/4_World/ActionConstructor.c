@@ -7,6 +7,9 @@ modded class ActionConstructor
 		//Drugs
 		actions.Insert(HRZ_ActionEatCrack);
 		actions.Insert(HRZ_ActionInjectKokain);
+		actions.Insert(HRZ_ActionInjectTest);
+		actions.Insert(HRZ_ActionInjectTest2);
+		
         	actions.Insert(HRZ_ActionJointSmokeSelf);
 		actions.Insert(HRZ_ActionSmokeSelf); 
         	actions.Insert(HRZ_ActionFoldBloodPack);

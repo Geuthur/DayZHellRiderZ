@@ -12,5 +12,7 @@ modded class SymptomManager
 		RegisterSymptom(new HRZ_KokainSymptom);
 		RegisterSymptom(new HRZ_CrystalSymptom);
 		RegisterSymptom(new HRZ_CannabisSymptom);
+		RegisterSymptom(new HRZ_BlurSymptom);
+		RegisterSymptom(new HRZ_TestSymptom);
 	}
 }

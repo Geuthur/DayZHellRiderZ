@@ -8,5 +8,6 @@ modded class ModifiersManager
 		AddModifier(new HRZ_CrystalMdfr);
 		AddModifier(new HRZ_KokainMdfr);	
 		AddModifier(new HRZ_TestMdfr);
+		AddModifier(new HRZ_BlurMdfr);
 	}
 }
