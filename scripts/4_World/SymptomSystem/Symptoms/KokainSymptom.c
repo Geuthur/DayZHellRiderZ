@@ -1,5 +1,6 @@
 class HRZ_KokainSymptom extends SymptomBase
  {
+	
 	float m_BlurDuration;
 	float m_BlurStrength;
 	float m_EffectTime;
@@ -32,6 +33,7 @@ class HRZ_KokainSymptom extends SymptomBase
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
   {		
+		
 		HRZ_PPEffects.SetDynamicEffectValue(HRZ_EffectID.Kokain, 10.0);
 		
 		HRZ_PPEffects.SetRotiBlurEffectValue(HRZ_EffectID.Kokain, 0, 1.0, 2.0);
@@ -44,20 +46,17 @@ class HRZ_KokainSymptom extends SymptomBase
 			m_EffectStartTime = Math.RandomFloatInclusive(MIN_TIME_BETWEEN_EFFECTS, MAX_TIME_BETWEEN_EFFECTS);
 			m_BlurDuration = Math.RandomFloatInclusive(BLUR_DURATION_TIME_MIN, BLUR_DURATION_TIME_MAX);
 			m_BlurStrength = Math.RandomFloat(BLUR_STRENGTH_MIN, BLUR_STRENGTH_MAX);
-			//PrintString("m_BlurDuration=" +m_BlurDuration.ToString());
 		}
 		
 		if( m_EffectStartTime > 0 && m_Time > m_EffectStartTime )
 		{
-
 			m_EffectTime += deltatime / m_BlurDuration;
-			//m_EffectTime += deltatime;
+			
 			float cos_value = Math.Sin(m_EffectTime  * Math.PI);
 			float kokain = cos_value * m_BlurStrength;
-			//Print(kokain);
+
 			HRZ_PPEffects.SetRotiBlurEffectValue(HRZ_EffectID.Kokain, kokain, 1.0, 2.0);
 			
-			//PrintString("cos=" +cos_value.ToString());
 			GetGame().GetPlayer().GetCurrentCamera().SpawnCameraShake(kokain,5,4,2);
 			
 			if( m_EffectTime >= 1 )
