@@ -251,28 +251,28 @@ class HRZ_PPEffects extends PPEffects
 		m_MatColors.SetParam("VignetteColor", color);
 	}
 	
-	static void HRZ_SetVignetteEffectValue(int index, float intensity, float r, float g, float b, float a)
+	static void HRZ_SetVignetteEffectValue(int effectID, float intensity, float r, float g, float b, float a)
 	{
-		if ( index < m_Effects.Count() )
+		if ( effectID < m_Effects.Count() )
 		{
 			ref array<float> values = {intensity,r,g,b,a};
 			
-			m_HRZVignetteValues.Set(index, values);
+			m_HRZVignetteValues.Set(effectID, values);
 		}
 		else
 		{
-			Print("Error: PPEffects: m_EffectsValues with index: "+ index +" is not registered.");
+			Print("Error: PPEffects: m_EffectsValues with index: "+ effectID +" is not registered.");
 		}
 		HRZ_UpdateVignette();
 	}
 	
-	static void HRZ_ResetVignettes(int neweffect)
+	static void HRZ_ResetVignettes(int effectID)
 	{
 		if( m_HRZVignetteValues )
 		{
 				ref array<float> values = {0,0,0,0,0};
 			
-				m_HRZVignetteValues.Set(neweffect, values);
+				m_HRZVignetteValues.Set(effectID, values);
 			
 			HRZ_UpdateVignette();
 		}
@@ -322,28 +322,28 @@ class HRZ_PPEffects extends PPEffects
 	}
 	
 	
-	static void SetRotiBlurEffectValue(int index, float power, float mindepth, float maxdepth)
+	static void SetRotiBlurEffectValue(int effectID, float power, float mindepth, float maxdepth)
 	{
-		if ( index < m_Effects.Count() )
+		if ( effectID < m_Effects.Count() )
 		{
 			ref array<float> values = {power,mindepth,maxdepth};
 			
-			m_RotiBlurValues.Set(index, values);
+			m_RotiBlurValues.Set(effectID, values);
 		}
 		else
 		{
-			Print("Error: HRZ_PPEffects: m_RotiBlurValues with index: "+ index +" is not registered.");
+			Print("Error: HRZ_PPEffects: m_RotiBlurValues with effectID: "+ effectID +" is not registered.");
 		}
 		UpdateRotiBlur();
 	}
 	
-	static void ResetRotiBlurs(int neweffect)
+	static void ResetRotiBlurs(int effectID)
 	{
 		if( m_RotiBlurValues )
 		{
 				ref array<float> values = {0,0,0};
 			
-				m_RotiBlurValues.Set(neweffect, values);
+				m_RotiBlurValues.Set(effectID, values);
 			UpdateRotiBlur();
 		}
 	}
@@ -387,28 +387,28 @@ class HRZ_PPEffects extends PPEffects
 	// Roti BLUR END
 	//-------------------------------------------------------
 	
-	static void ResetDynamics(int neweffect)
+	static void ResetDynamics(int effectID)
 	{
 		if( m_DynamicValues )
 		{
 				ref array<float> values = {0};
 				
-				m_DynamicValues.Set(neweffect, values);
+				m_DynamicValues.Set(effectID, values);
 			UpdateDynamic();
 		}
 	}
 	
-	static void SetDynamicEffectValue(int index, float value)
+	static void SetDynamicEffectValue(int effectID, float value)
 	{
-		if ( index < m_Effects.Count() )
+		if ( effectID < m_Effects.Count() )
 		{
 			ref array<float> values = {value};
 			
-			m_DynamicValues.Set(index, values);
+			m_DynamicValues.Set(effectID, values);
 		}
 		else
 		{
-			Print("Error: HRZ_PPEffects: m_DynamicValues with index: "+ index +" is not registered.");
+			Print("Error: HRZ_PPEffects: m_DynamicValues with effectID: "+ effectID +" is not registered.");
 		}
 	UpdateDynamic();
 	}
@@ -451,29 +451,29 @@ class HRZ_PPEffects extends PPEffects
 	// Dynamic BLUR END
 	//-------------------------------------------------------
 		
-	static void ResetChromAbers(int neweffect)
+	static void ResetChromAbers(int effectID)
 	{
 		if( m_ChromAbersValues )
 		{
 				ref array<float> values = {0,0};
 			
-				m_ChromAbersValues.Set(neweffect, values);
+				m_ChromAbersValues.Set(effectID, values);
 			
 			UpdateChromAbers();
 		}
 	}
 	
-	static void SetChromAbersEffectValue(int index, float powerx, float powery)
+	static void SetChromAbersEffectValue(int effectID, float powerx, float powery)
 	{
-		if ( index < m_Effects.Count() )
+		if ( effectID < m_Effects.Count() )
 		{
 			ref array<float> values = {powerx,powery};
 			
-			m_ChromAbersValues.Set(index, values);
+			m_ChromAbersValues.Set(effectID, values);
 		}
 		else
 		{
-			Print("Error: HRZ_PPEffects: m_ChromAbersValues with index: "+ index +" is not registered.");
+			Print("Error: HRZ_PPEffects: m_ChromAbersValues with effectID: "+ effectID +" is not registered.");
 		}
 	UpdateChromAbers();
 	}
@@ -527,13 +527,13 @@ class HRZ_PPEffects extends PPEffects
 	// ChromAbbs END
 	//-------------------------------------------------------
 	
-	static void ResetRadialBlur(int neweffect)
+	static void ResetRadialBlur(int effectID)
 	{
 		if( m_RadialBlurValues )
 		{
 				ref array<float> values = {0,0,0,0};
 			
-				m_RadialBlurValues.Set(neweffect, values);
+				m_RadialBlurValues.Set(effectID, values);
 			
 			UpdateRadialBlur();
 			if (m_PulseActive)
@@ -548,17 +548,17 @@ class HRZ_PPEffects extends PPEffects
 		}
 	}
 	
-	static void SetRadialBlurEffectValue(int index, float powerx, float powery, float offsetx, float offsety)
+	static void SetRadialBlurEffectValue(int effectID, float powerx, float powery, float offsetx, float offsety)
 	{
-		if ( index < m_Effects.Count() )
+		if ( effectID < m_Effects.Count() )
 		{
 			ref array<float> values = {powerx,powery,offsetx,offsety};
 			
-			m_RadialBlurValues.Set(index, values);
+			m_RadialBlurValues.Set(effectID, values);
 		}
 		else
 		{
-			Print("Error: HRZ_PPEffects: m_RadialBlurValues with index: "+ index +" is not registered.");
+			Print("Error: HRZ_PPEffects: m_RadialBlurValues with effectID: "+ effectID +" is not registered.");
 		}
 	UpdateRadialBlur();
 	}
@@ -713,13 +713,13 @@ class HRZ_PPEffects extends PPEffects
 		}
 	}
 	
-	static void ResetAllEffects(int neweffect)
+	static void ResetAllEffects(int effectID)
 	{
-		ResetRotiBlurs(neweffect);
-		ResetDynamics(neweffect);
-		ResetChromAbers(neweffect);
-		ResetRadialBlur(neweffect);
-		HRZ_ResetVignettes(neweffect);
+		ResetRotiBlurs(effectID);
+		ResetDynamics(effectID);
+		ResetChromAbers(effectID);
+		ResetRadialBlur(effectID);
+		HRZ_ResetVignettes(effectID);
 		ResetColorize();
 		//ResetColor();
 		ResetFilmGrain();
