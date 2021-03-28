@@ -6,7 +6,7 @@ enum HRZ_JointBurningState
 
 class HRZ_Joint_Base : ItemBase
 {	
-	private int	m_BurningState = HRZ_CigaretteBurningState.NOT_BURNING;
+	private int	m_BurningState = HRZ_JointBurningState.NOT_BURNING;
 
 	HRZ_CigaretteLight m_Light;
 	ref protected EffectSound 	m_SmokingSound;
@@ -128,7 +128,7 @@ class HRZ_Joint_Base : ItemBase
 	
 	override void OnWorkStart()
 	{
-		SetBurningState(HRZ_CigaretteBurningState.BURNING);
+		SetBurningState(HRZ_JointBurningState.BURNING);
 		if ( !GetGame().IsServer()  ||  !GetGame().IsMultiplayer() ) // Client side
 		{
 			CreateCigaretteLight();
@@ -139,9 +139,9 @@ class HRZ_Joint_Base : ItemBase
 	{
 		if ( GetGame().IsServer() )
 		{
-			SetBurningStateSynchronized(HRZ_CigaretteBurningState.NOT_BURNING);
+			SetBurningStateSynchronized(HRZ_JointBurningState.NOT_BURNING);
 		} else {
-			SetBurningState(HRZ_CigaretteBurningState.NOT_BURNING);
+			SetBurningState(HRZ_JointBurningState.NOT_BURNING);
 		}	
         if (GetQuantity() <= 0 ) {
 			this.Delete();

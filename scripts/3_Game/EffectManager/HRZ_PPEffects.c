@@ -13,7 +13,7 @@
 class HRZ_PPEffects extends PPEffects
 {
 	// COLORIZE IDs
-	static const int COLORIZE_FG = 100;
+	//static const int COLORIZE_FG = 100;
 	
 	static Material m_MatRotiBlur;
 	static Material m_MatDynamic;
@@ -117,7 +117,6 @@ class HRZ_PPEffects extends PPEffects
 	static float FModulus(float x, float y)
 	{
 		float res;
-		//Prevent division by 0
 		if (y == 0)
 			y = 1;
 		
@@ -152,7 +151,7 @@ class HRZ_PPEffects extends PPEffects
 		UpdateRadialBlur();
 	}	
 	
-	static void CrazyPulsingRadialEffect(int effectID, float deltatime)
+	static void CrazyPulsingRadialEffect(int effectID, float deltatime, float bobbing)
 	{
 		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
 		private const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
@@ -164,7 +163,7 @@ class HRZ_PPEffects extends PPEffects
 		
 		m_CrazyPulseTimer += deltatime;
 		
-		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_CrazyPulseTimer * 0.01));
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_CrazyPulseTimer * 0.01) * bobbing);
 		
 		SetRadialBlurEffectValue(effectID, m_Pulse, m_Pulse, 0, 0);
 		
@@ -175,36 +174,25 @@ class HRZ_PPEffects extends PPEffects
 	}
 	
 	//-------------------------------------------------------
-	// Abstract Effects Beta
+	// Abstract Effects Beta - Known Bugs - Jump & Boxing will reset the Effect
 	//-------------------------------------------------------
+	
 	private static float 					m_DarkPulseTimer; // Speed of Pulsing Between 0-1
 	private static bool 					m_DarkPulseActive;
 	private static float 					m_WabblePulseTimer; // Speed of Pulsing Between 0-1
 	private static bool 					m_WabblePulseActive;
 	
-	static void DarkWorldEffect(int effectID, float deltatime)
+	static void DarkWorldEffect()
 	{
-		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
-		private const float 					PULSE_AMPLITUDE = 0.2; //This is a multiplier, keep below 1 or expect the unexpected
-		private float 							m_Pulse; //Pulse result
-		m_DarkPulseActive = true;
-		
-		if (deltatime > 1)
-		deltatime = 1;
-		
-		m_DarkPulseTimer += deltatime;
-		
-		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_DarkPulseTimer * 0.01));
-		//Print (m_Pulse);
 		PPEffects.SetBloodSaturation(5);
 		HRZ_PPEffects.SetColorizationNV(-1,-1,-1);
-		//HRZ_PPEffects.SetGrainEffectValue(effectID, m_Pulse,m_Pulse,m_Pulse);
 	}
 	
-	static void WabbleEffect(int effectID, float deltatime)
+	static void WabbleEffect(float bobbing, float size)
 	{
+		/*
 		private const float 					PULSE_PERIOD = 1; //The time it takes for pulse to do a full cycle
-		private const float 					PULSE_AMPLITUDE = 0.01; //This is a multiplier, keep below 1 or expect the unexpected
+		private const float 					PULSE_AMPLITUDE = 0.5; //This is a multiplier, keep below 1 or expect the unexpected
 		private float 							m_Pulse; //Pulse result
 		m_WabblePulseActive = true;
 		
@@ -213,9 +201,34 @@ class HRZ_PPEffects extends PPEffects
 		
 		m_WabblePulseTimer += deltatime;
 		
-		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_WabblePulseTimer * 0.01));
-		//Print (m_WabblePulseTimer);
-		HRZ_PPEffects.SetFilmGrain(0,m_Pulse,m_Pulse,6);
+		//m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_WabblePulseTimer * 0.01)) * 1;
+		//m_Pulse = Math.Lerp(0.1, 0.9, m_WabblePulseTimer);
+		//Print (m_Pulse);
+		*/
+		HRZ_PPEffects.SetFilmGrain(0,0.1,bobbing,size);
+	}
+	
+	//-------------------------------------------------------
+	// Camera Effects
+	//-------------------------------------------------------
+	private static float 						m_CameraPulseTimer; // Speed of Pulsing Between 0-1
+	
+	static void CameraEffect(float strength, float smoothness, float bobbing)
+	{
+		private const float 					PULSE_PERIOD = 0.1; //The time it takes for pulse to do a full cycle
+		private const float 					PULSE_AMPLITUDE = 1; //This is a multiplier, keep below 1 or expect the unexpected
+		private float 							m_Pulse; //Pulse result
+		
+		if (smoothness > 1)
+		smoothness = 1;
+		if (m_CameraPulseTimer > 1000)
+		m_CameraPulseTimer = 0;
+		
+		m_CameraPulseTimer += smoothness;
+		
+		m_Pulse = Bobbing(PULSE_PERIOD, PULSE_AMPLITUDE, (m_CameraPulseTimer * Math.PI_HALF)) * bobbing;
+		
+		GetGame().GetPlayer().GetCurrentCamera().SpawnCameraShake(m_Pulse,strength,10,1);
 	}
 	
 	/*!
@@ -225,10 +238,9 @@ class HRZ_PPEffects extends PPEffects
 	\param G
 	\param B
 	*/
+	
 	static void HRZ_SetVignette(float intensity, float R, float G, float B, float A)
 	{
-		//Material matHDR = GetGame().GetWorld().GetMaterial("Graphics/Materials/postprocess/glow");
-
 		float color[4];
 		color[0] = R;
 		color[1] = G;
@@ -271,7 +283,7 @@ class HRZ_PPEffects extends PPEffects
 		float color[4];
 		float intesity;
 		
-		float intensity_value_total = 0; //use just the highest?
+		float intensity_value_total = 0;
 		if( m_Effects )
 		{
 			for ( int i = 0; i < m_Effects.Count(); ++i )
@@ -342,9 +354,9 @@ class HRZ_PPEffects extends PPEffects
 		float MinDepth
 		float MaxDepth
 		
-		float Power_value_total = 0; //use just the highest?
-		float MinDepth_value_total = 0; //use just the highest?
-		float MaxDepth_value_total = 0; //use just the highest?
+		float Power_value_total = 0;
+		float MinDepth_value_total = 0;
+		float MaxDepth_value_total = 0;
 		
 		if( m_Effects )
 		{
@@ -467,8 +479,9 @@ class HRZ_PPEffects extends PPEffects
 	}
 	
 	/*!
-	\ Dynamic Blur
-	\ Power 0
+	\ Chrom Abers
+	\ PowerX 0
+	\ PowerY 0
 	*/
 	
 	static void SetChromAbers(float PowerX, float PowerY)
@@ -537,7 +550,6 @@ class HRZ_PPEffects extends PPEffects
 	
 	static void SetRadialBlurEffectValue(int index, float powerx, float powery, float offsetx, float offsety)
 	{
-		//Print (m_Effects.Count());
 		if ( index < m_Effects.Count() )
 		{
 			ref array<float> values = {powerx,powery,offsetx,offsety};
@@ -552,8 +564,11 @@ class HRZ_PPEffects extends PPEffects
 	}
 	
 	/*!
-	\ Dynamic Blur
-	\ Power 0
+	\ Radial Blur
+	\ PowerX 0
+	\ PowerY 0
+	\ OffsetX 0
+	\ OffsetY 0
 	*/
 	
 	static void SetRadialBlur(float PowerX, float PowerY, float OffsetX, float OffsetY)
