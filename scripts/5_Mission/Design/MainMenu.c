@@ -2,7 +2,7 @@ modded class MainMenu extends UIScriptedMenu
 {
 	protected Widget				discord_button;
 	protected Widget				homepage_button;
-
+	
 	override Widget Init()
 	{
 		layoutRoot = GetGame().GetWorkspace().CreateWidgets( "Client/gui/MainMenu.layout" );
@@ -11,44 +11,24 @@ modded class MainMenu extends UIScriptedMenu
 		discord_button				= layoutRoot.FindAnyWidget( "discord_button" );
 		
 		m_Play						= layoutRoot.FindAnyWidget( "play" );
-		m_ChooseServer				= layoutRoot.FindAnyWidget( "choose_server" );
 		m_CustomizeCharacter		= layoutRoot.FindAnyWidget( "customize_character" );
-		m_PlayVideo					= layoutRoot.FindAnyWidget( "play_video" );
 		m_Tutorials					= layoutRoot.FindAnyWidget( "tutorials" );
 		m_TutorialButton			= layoutRoot.FindAnyWidget( "tutorial_button" );
-		m_MessageButton				= layoutRoot.FindAnyWidget( "message_button" );
 		m_SettingsButton			= layoutRoot.FindAnyWidget( "settings_button" );
-		m_Exit						= layoutRoot.FindAnyWidget( "exit_button" );
-		m_PrevCharacter				= layoutRoot.FindAnyWidget( "prev_character" );
-		m_NextCharacter				= layoutRoot.FindAnyWidget( "next_character" );
+		m_Exit						= layoutRoot.FindAnyWidget( "exit_button" ); 
 
 		m_Version					= TextWidget.Cast( layoutRoot.FindAnyWidget( "version" ) );
-		m_ModdedWarning				= TextWidget.Cast( layoutRoot.FindAnyWidget( "ModdedWarning" ) );
 		m_CharacterRotationFrame	= layoutRoot.FindAnyWidget( "character_rotation_frame" );
 		
-		m_LastPlayedTooltip			= layoutRoot.FindAnyWidget( "last_server_info" );
-		m_LastPlayedTooltip.Show(false);
-		m_LastPlayedTooltipLabel	= m_LastPlayedTooltip.FindAnyWidget( "last_server_info_label" );
-		m_LastPlayedTooltipName 	= TextWidget.Cast( m_LastPlayedTooltip.FindAnyWidget( "last_server_info_name" ) );
-		m_LastPlayedTooltipIP		= TextWidget.Cast( m_LastPlayedTooltip.FindAnyWidget( "last_server_info_ip" ) );
-		m_LastPlayedTooltipPort		= TextWidget.Cast( m_LastPlayedTooltip.FindAnyWidget( "last_server_info_port" ) );
-		
-		m_LastPlayedTooltipTimer	= new WidgetFadeTimer();
-		
 		m_Stats						= new MainMenuStats( layoutRoot.FindAnyWidget( "character_stats_root" ) );
-		
 		m_Mission					= MissionMainMenu.Cast( GetGame().GetMission() );
-		
-		m_LastFocusedButton = 		m_Play;
-
+		m_LastFocusedButton 		= m_Play;
 		m_ScenePC					= m_Mission.GetIntroScenePC();
 		
 		if( m_ScenePC )
 		{
 			m_ScenePC.ResetIntroCamera();
 		}
-		
-		m_PlayVideo.Show( false );
 		
 		m_PlayerName				= TextWidget.Cast( layoutRoot.FindAnyWidget("character_name_text") );
 		
@@ -62,8 +42,6 @@ modded class MainMenu extends UIScriptedMenu
 		SetFocus( null );
 		
 		Refresh();
-		
-		LoadMods();
 		
 		GetDayZGame().GetBacklit().MainMenu_OnShow();
 	
@@ -79,13 +57,7 @@ modded class MainMenu extends UIScriptedMenu
 			if( w == m_Play )
 			{
 				m_LastFocusedButton = m_Play;
-				Play();
-				return true;
-			}
-			else if ( w == m_ChooseServer )
-			{
-				m_LastFocusedButton = m_ChooseServer;
-				OpenMenuServerBrowser();
+				g_Game.ConnectFromServerBrowser( HRZip, HRZport, "" ); 
 				return true;
 			}
 			else if ( w == m_CustomizeCharacter )
@@ -108,27 +80,6 @@ modded class MainMenu extends UIScriptedMenu
 				OpenSettings();
 				return true;
 			}
-			else if ( w == m_Exit )
-			{
-				Exit();
-				return true;
-			}
-			else if ( w == m_PrevCharacter )
-			{
-				PreviousCharacter();
-				return true;
-			}
-			else if ( w == m_NextCharacter )
-			{
-				NextCharacter();
-				return true;
-			}
-			else if ( w == m_PlayVideo )
-			{
-				m_LastFocusedButton = m_PlayVideo;
-				PlayVideo();
-				return true;
-			}
 			else if ( w == m_Tutorials )
 			{
 				m_LastFocusedButton = m_Tutorials;
@@ -145,6 +96,11 @@ modded class MainMenu extends UIScriptedMenu
 				GetGame().OpenURL("https://hell-rider.de/DayZ"); //Replace my links to yours. Opens any URL Page in browser
 				return true;
 			}	
+			else if ( w == m_Exit )
+			{
+				Exit();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -171,7 +127,7 @@ modded class MainMenu extends UIScriptedMenu
 					text.SetText("CHARACTER");
 				}
 				else
-				{
+				{ 
 					text.SetText("CHARACTER");
 				}
 			}
@@ -186,5 +142,15 @@ modded class MainMenu extends UIScriptedMenu
 			//update character stats
 			m_Stats.UpdateStats();
 		}
+	}
+	
+	override void LoadMods()
+	{
+		return;
+	}
+	
+	override void Play()
+	{
+		return;
 	}
 }
