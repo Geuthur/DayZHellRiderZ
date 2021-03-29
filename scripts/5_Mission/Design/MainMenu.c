@@ -1,54 +1,14 @@
 modded class MainMenu extends UIScriptedMenu
 {
-	protected Widget				custom_button1;
-	protected Widget				custom_button2;
-
-	protected ref MainMenuStats		m_Stats;
-	protected ref MainMenuVideo		m_Video;
-	
-	protected MissionMainMenu		m_Mission;
-	protected DayZIntroScenePC 		m_ScenePC;
-	
-	protected TextWidget			m_PlayerName;
-	protected TextWidget			m_Version;
-	
-	protected Widget				m_CharacterRotationFrame;
-	
-	protected Widget				m_Play;
-	protected Widget		 		m_ChooseServer;
-	protected Widget				m_CustomizeCharacter;
-	protected Widget				m_PlayVideo;
-	protected Widget				m_Tutorials;
-	protected Widget				m_TutorialButton;
-	protected Widget				m_MessageButton;
-	protected Widget				m_SettingsButton;
-	protected Widget				m_Exit;
-	protected Widget				m_NewsMain;
-	protected Widget				m_NewsSec1;
-	protected Widget				m_NewsSec2;
-	protected Widget				m_PrevCharacter;
-	protected Widget				m_NextCharacter;
-	
-	protected Widget				m_LastPlayedTooltip;
-	protected Widget				m_LastPlayedTooltipLabel;
-	protected TextWidget 			m_LastPlayedTooltipName;
-	protected TextWidget			m_LastPlayedTooltipIP;
-	protected TextWidget			m_LastPlayedTooltipPort;
-	
-	protected ref WidgetFadeTimer	m_LastPlayedTooltipTimer;
-	protected ref Widget			m_LastFocusedButton;
-	
-	protected ref TextWidget		m_ModdedWarning;
-	protected ref ModsMenuSimple	m_ModsSimple;
-	protected ref ModsMenuDetailed	m_ModsDetailed;
-	protected ref ModsMenuTooltip	m_ModsTooltip;
+	protected Widget				discord_button;
+	protected Widget				homepage_button;
 
 	override Widget Init()
 	{
-		layoutRoot = GetGame().GetWorkspace().CreateWidgets( "Client/gui/main_menu.layout" );
+		layoutRoot = GetGame().GetWorkspace().CreateWidgets( "Client/gui/MainMenu.layout" );
 		
-		custom_button1				= layoutRoot.FindAnyWidget( "custom_button1" );
-		custom_button2				= layoutRoot.FindAnyWidget( "custom_button2" );
+		homepage_button				= layoutRoot.FindAnyWidget( "homepage_button" );
+		discord_button				= layoutRoot.FindAnyWidget( "discord_button" );
 		
 		m_Play						= layoutRoot.FindAnyWidget( "play" );
 		m_ChooseServer				= layoutRoot.FindAnyWidget( "choose_server" );
@@ -175,12 +135,12 @@ modded class MainMenu extends UIScriptedMenu
 				OpenTutorials();
 				return true;
 			}
-					else if ( w == custom_button1 )
+			else if ( w == discord_button )
 			{
 				GetGame().OpenURL("https://discord.hell-rider.de"); //Replace my links to yours. Opens any URL Page in browser
 				return true;
 			}
-			else if ( w == custom_button2 )
+			else if ( w == homepage_button )
 			{
 				GetGame().OpenURL("https://hell-rider.de/DayZ"); //Replace my links to yours. Opens any URL Page in browser
 				return true;
@@ -212,7 +172,7 @@ modded class MainMenu extends UIScriptedMenu
 				}
 				else
 				{
-					text.SetText("UMBENENNEN");
+					text.SetText("CHARACTER");
 				}
 			}
 			if (m_ScenePC.GetIntroCharacter().GetCharacterObj() )

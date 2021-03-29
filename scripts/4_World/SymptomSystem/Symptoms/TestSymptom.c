@@ -41,30 +41,20 @@ class HRZ_TestSymptom extends SymptomBase
   
   override void OnUpdateClient(PlayerBase player, float deltatime)
   {		
-		/*
 		m_PulseTimer += deltatime;
 		int m_cycle = m_PulseTimer;
-		if (m_cycle > 5 && m_cycle < 11){
-		Print ("Sym:" + m_PulseTimer);
-		HRZ_PPEffects.CrazyPulsingRadialEffect(HRZ_EffectID.Crystal, 0.01);
-		}*/ 
-		//HRZ_PPEffects.DarkWorldEffect(HRZ_EffectID.Blur, 1);
-		HRZ_PPEffects.WabbleEffect(HRZ_EffectID.Blur, 0.1); 
 		/*
-			int m_cycle = m_PulseTimer;
-			if (m_cycle == 5){
-			EffectSound sound =	SEffectManager.PlaySound( "HRZ_Drug1_SoundSet", GetCurrentPosition() );
-			sound.SetSoundAutodestroy( true );
-			}
-		*/
+		if (m_cycle > 5 && m_cycle < 11){
+		HRZ_PPEffects.PulsingRadialEffect(HRZ_EffectID.Test, 1);
+		} else {
+		HRZ_PPEffects.SetRadialBlurEffectValue(HRZ_EffectID.Test,0, 0, 0.76, 0);
+		}*/
+		//HRZ_PPEffects.PulsingRadialEffect(HRZ_EffectID.Test, 1);
+		//HRZ_PPEffects.CrazyPulsingRadialEffect(HRZ_EffectID.Test, 1, 1);
+		//HRZ_PPEffects.DarkWorldEffect();
+		HRZ_PPEffects.WabbleEffect( 0.5 , 7 ); // 
+		//HRZ_PPEffects.CameraEffect(1, 0.1, 1); // Strenght, Smoothness, Bobbing Multiplier
   }
-
-	private float LerpVignette(float x, float y, float deltatime)
-	{
-		float output;
-		output = Math.Lerp(x, y, deltatime);
-		return output;
-	}
 	
   override void OnGetActivatedServer(PlayerBase player)
   {
@@ -76,15 +66,11 @@ class HRZ_TestSymptom extends SymptomBase
 
         Event_OnActivatedClient.Invoke(player, Type()); // pass player pointer and typename
 		
-		//HRZ_PPEffects.SetChromAbersEffectValue(HRZ_EffectID.Blur,0, 0);
-
-		//HRZ_PPEffects.HRZ_SetVignetteEffectValue(HRZ_EffectID.Blur, 3, 250, 127, 4, 0.2);
-		PPEffects.SetBloodSaturation(1);
-		
-		//HRZ_PPEffects.SetDynamicEffectValue(HRZ_EffectID.Blur,20.0);
-		
-		//HRZ_PPEffects.SetRotiBlurEffectValue(HRZ_EffectID.Blur,0.50, 2.50, 10.0);
-		//HRZ_PPEffects.SetRadialBlurEffectValue(HRZ_EffectID.Blur,0, 0, 0.76, 0);
+		//HRZ_PPEffects.SetChromAbersEffectValue(HRZ_EffectID.Test,0.2, 0.2);
+		//HRZ_PPEffects.HRZ_SetVignetteEffectValue(HRZ_EffectID.Test, 3, 250, 127, 4, 0.2);
+		//PPEffects.SetBloodSaturation(5);
+		//HRZ_PPEffects.SetDynamicEffectValue(HRZ_EffectID.Test,20.0);
+		//HRZ_PPEffects.SetRotiBlurEffectValue(HRZ_EffectID.Test,0.50, 2.50, 10.0);
   }
   
   override void OnGetDeactivatedServer(PlayerBase player)
@@ -98,8 +84,9 @@ class HRZ_TestSymptom extends SymptomBase
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 		
-		HRZ_PPEffects.ResetAll();
-		PPEffects.ResetAll();
+		//HRZ_PPEffects.SetChromAbersEffectValue(HRZ_EffectID.Crystal,0, 0);
+		HRZ_PPEffects.ResetAllEffects(HRZ_EffectID.Test);
+		//PPEffects.ResetAll();
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }

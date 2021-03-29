@@ -42,7 +42,6 @@ class HRZ_CannabisSymptom extends SymptomBase
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 		
-		PPEffects.ResetVignettes();
 		PPEffects.SetBloodSaturation(1);
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");

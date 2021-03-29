@@ -398,11 +398,11 @@ class HRZ_PPEffects extends PPEffects
 		}
 	}
 	
-	static void SetDynamicEffectValue(int effectID, float value)
+	static void SetDynamicEffectValue(int effectID, float Power)
 	{
 		if ( effectID < m_Effects.Count() )
 		{
-			ref array<float> values = {value};
+			ref array<float> values = {Power};
 			
 			m_DynamicValues.Set(effectID, values);
 		}

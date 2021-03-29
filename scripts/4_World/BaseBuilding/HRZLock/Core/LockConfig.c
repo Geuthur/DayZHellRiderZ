@@ -1,6 +1,6 @@
 class HRZCodeLock extends PluginBase
 {
-	protected const string m_LogDirectory = "$profile:HellRiderZ/";
+    protected const string m_LogDirectory = "$profile:HellRiderZ/";
     const static string cfgPath = "$profile:HellRiderZ/HRZCodeLock.json";
     private bool m_CanHackLock;
 

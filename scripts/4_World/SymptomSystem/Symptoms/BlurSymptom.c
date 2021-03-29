@@ -44,11 +44,11 @@ class HRZ_BlurSymptom extends SymptomBase
 		/*
 		m_PulseTimer += deltatime;
 		int m_cycle = m_PulseTimer;
-		if (m_cycle > 5 && m_cycle < 11){
+		if (m_cycle > 5 && m_cycle < 11){ 
 		Print ("Sym:" + m_PulseTimer);
 		HRZ_PPEffects.CrazyPulsingRadialEffect(HRZ_EffectID.Crystal, 0.01);
 		}*/ 
-		HRZ_PPEffects.DarkWorldEffect(HRZ_EffectID.Blur, 1);
+		HRZ_PPEffects.DarkWorldEffect();
 		//GetPlayer().GetInputController().OverrideMovementSpeed(true, 4);
 		//HRZ_PPEffects.WabbleEffect(HRZ_EffectID.Blur, 0.1); 
 		/*
@@ -60,14 +60,7 @@ class HRZ_BlurSymptom extends SymptomBase
 		*/
   }
 
-	private float LerpVignette(float x, float y, float deltatime)
-	{
-		float output;
-		output = Math.Lerp(x, y, deltatime);
-		return output;
-	}
-	
-  override void OnGetActivatedServer(PlayerBase player)
+	  override void OnGetActivatedServer(PlayerBase player)
   {
   }
   
@@ -77,7 +70,7 @@ class HRZ_BlurSymptom extends SymptomBase
 
         Event_OnActivatedClient.Invoke(player, Type()); // pass player pointer and typename
 		
-		//HRZ_PPEffects.SetChromAbersEffectValue(HRZ_EffectID.Blur,0, 0);
+		HRZ_PPEffects.SetChromAbersEffectValue(HRZ_EffectID.Blur,0.1, 0.1);
 		//HRZ_PPEffects.HRZ_SetVignetteEffectValue(HRZ_EffectID.Blur, 3, 250, 127, 4, 0.2);
 		PPEffects.SetBloodSaturation(1);
 		
@@ -98,8 +91,7 @@ class HRZ_BlurSymptom extends SymptomBase
 
         Event_OnDeactivatedClient.Invoke(player, Type()); // pass player pointer and typename
 		
-		HRZ_PPEffects.ResetAll();
-		PPEffects.ResetAll();
+		HRZ_PPEffects.ResetAllEffects(HRZ_EffectID.Blur);
 		
   Debug.Log("OnGetDeactivated ShakeSymptom called", "PlayerSymptom");
   }
