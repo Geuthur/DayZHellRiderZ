@@ -2,8 +2,8 @@ class HRZ_Instruments_Base extends Clothing
 {
 	ref HumanMovementState state = new HumanMovementState();
 	protected ItemBase m_Instruments;
-    protected bool m_InstrumentPlaying;
-    protected EffectSound m_InstrumentActiveSound;
+    	protected bool m_InstrumentPlaying;
+    	protected EffectSound m_InstrumentActiveSound;
 	protected bool m_IsActive = false;
 	static bool HRZ_InstrumentMenu = false;
 	
@@ -19,22 +19,20 @@ class HRZ_Instruments_Base extends Clothing
 	{
 		return !m_IsActive;
 	}
+	
 	/*
 	override void EEItemIntoHands (EntityAI item)
 	{
 		HRZ_InstrumentMenu = true;
 	}
 	*/
-	/*
+	
 	override void SetActions()
 	{
 		super.SetActions();
-		
-		AddAction(ActionTurnOnWhileInHands);
-		AddAction(ActionTurnOffWhileInHands);
+
 		AddAction(HRZ_ActionSwitchSong);
 	}
-	*/
 	
     override void OnVariablesSynchronized()
 	{
@@ -90,14 +88,6 @@ class HRZ_Instruments_Base extends Clothing
 
 	bool PlaySong()
 	{
-		//PlayerBase player;
-		
-		//EmoteManager.CreateEmoteCallback(EmoteCB,DayZPlayerConstants.CMD_GESTUREFB_SITA,DayZPlayerConstants.STANCEMASK_CROUCH,true);
-		//EmoteManager.PlayEmote(101);
-	    //Print("PlaySong"); 
-		//player = EmoteManager.CreateEmoteCallback(EmoteCB,DayZPlayerConstants.CMD_GESTUREFB_SITA,DayZPlayerConstants.STANCEMASK_CROUCH,true);
-		//player = EmoteManager.PlayEmote(101);
-				         
         string cfgPath = "CfgVehicles " + m_Instruments.GetType() + " CfgInstruments" ;
 		
 		if( !GetGame().ConfigIsExisting( cfgPath ) ) return false;

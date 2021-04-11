@@ -5,7 +5,6 @@ class HRZ_Gitarre extends HRZ_Instruments_Base
 		super.SetActions();
 		AddAction(ActionTurnOnWhileInHands);
 		AddAction(ActionTurnOffWhileInHands);
-		AddAction(HRZ_ActionSwitchSong);
 	}
 }
 
@@ -16,7 +15,7 @@ class HRZ_Ibanez extends HRZ_Instruments_Base
 		super.SetActions();
 		AddAction(ActionTurnOnWhileInHands);
 		AddAction(ActionTurnOffWhileInHands);
-//		AddAction(HRZ_ActionSwitchSong);
+		RemoveAction(HRZ_ActionSwitchSong);
 	}
 }
 
@@ -27,7 +26,6 @@ class HRZ_Gitarre2 extends HRZ_Instruments_Base
 		super.SetActions();
 		AddAction(ActionTurnOnWhileInHands);
 		AddAction(ActionTurnOffWhileInHands);
-		AddAction(HRZ_ActionSwitchSong);
 	}
 }
 class HRZ_Gitarre3 extends HRZ_Instruments_Base
@@ -37,7 +35,6 @@ class HRZ_Gitarre3 extends HRZ_Instruments_Base
 		super.SetActions();
 		AddAction(ActionTurnOnWhileInHands);
 		AddAction(ActionTurnOffWhileInHands);
-		AddAction(HRZ_ActionSwitchSong);
 	}
 }
 class HRZ_Gitarre4 extends HRZ_Instruments_Base
@@ -57,6 +54,5 @@ class HRZ_Gitarre5 extends HRZ_Instruments_Base
 		super.SetActions();
 		AddAction(ActionTurnOnWhileInHands);
 		AddAction(ActionTurnOffWhileInHands);
-		AddAction(HRZ_ActionSwitchSong);
 	}
 }
