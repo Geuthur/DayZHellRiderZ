@@ -25,10 +25,11 @@ class HRZ_ActionDestroyCodeLock: ActionContinuousBase
 		m_ConditionTarget = new CCTNone;
 	}
 
-/* 	override int GetType()
+	/* 	override int GetType()
 	{
 		return ACTION_CUT_CODELOCK;
-	} */
+	} 
+	*/
 
 	override string GetText()
 	{
@@ -56,8 +57,9 @@ class HRZ_ActionDestroyCodeLock: ActionContinuousBase
 				GetRPCManager().SendRPC( "HRZLockRPC_Server", "HRZ_GetConfig", NULL, true, player.GetIdentity() );
 			}
 
-			if ( g_HRZLockRPCManager.m_CanHackLock )
+			/*if ( g_HRZLockRPCManager.m_CanHackLock )
 				return true;
+			*/
 		}
 		return false;
 	}
@@ -69,11 +71,13 @@ class HRZ_ActionDestroyCodeLock: ActionContinuousBase
 		Object targetObject = action_data.m_Target.GetObject();
 		Fence fence			= Fence.Cast( targetObject );
 		HRZ_CodeLock hrz_Lock;
-
+		
+		/*
 		if ( !g_HRZLockRPCManager.m_CanHackLock )
 		{
 			return;
 		}
+		*/
 
 		if ( fence )
 		{

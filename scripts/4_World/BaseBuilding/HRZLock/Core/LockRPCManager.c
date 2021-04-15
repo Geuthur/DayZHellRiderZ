@@ -3,7 +3,7 @@ class HRZLockRPCManager
     ref HRZ_SetCodeMenu         m_HRZSetCodeMenu;
     ref HRZ_EnterCodeMenu       m_HRZEnterCodeMenu;
 
-    bool m_CanHackLock = true;
+    //bool m_CanHackLock = true;
 
     void HRZLockRPCManager()
     {
@@ -54,7 +54,7 @@ class HRZLockRPCManager
         if ( !ctx.Read( data ) ) return;
         if ( type == CallType.Client )
         {
-            m_CanHackLock = data.param1;
+            //m_CanHackLock = data.param1;
         }
     }
 
@@ -63,8 +63,8 @@ class HRZLockRPCManager
     {
         if ( type == CallType.Server )
         {
-            m_CanHackLock = g_HRZCodeLock.CanHackLock();
-            GetRPCManager().SendRPC( "HRZLockRPC_Client", "HRZ_SetConfig", new Param1< bool >( m_CanHackLock ), true, sender );
+            //m_CanHackLock = g_HRZCodeLock.CanHackLock();
+            //GetRPCManager().SendRPC( "HRZLockRPC_Client", "HRZ_SetConfig", new Param1< bool >( m_CanHackLock ), true, sender );
         }
     }
 

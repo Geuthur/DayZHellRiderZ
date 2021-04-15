@@ -63,8 +63,8 @@ modded class MissionServer
     void MissionServer()
     {
 		g_HRZLockRPCManager = null;
-		g_HRZCodeLock = null;
         GetHRZLockRPCManager();
-        GetHRZCodeLock();
+		//g_HRZCodeLock = null;
+        //GetHRZCodeLock();
     }
 }

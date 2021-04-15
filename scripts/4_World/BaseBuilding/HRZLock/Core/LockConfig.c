@@ -1,8 +1,9 @@
+/*
 class HRZCodeLock extends PluginBase
 {
     protected const string m_LogDirectory = "$profile:HellRiderZ/";
     const static string cfgPath = "$profile:HellRiderZ/HRZCodeLock.json";
-    private bool m_CanHackLock;
+    //private bool m_CanHackLock;
 
     void HRZCodeLock()
     {
@@ -11,7 +12,7 @@ class HRZCodeLock extends PluginBase
             PrintFormat("[HRZ]::MakeDirectory - %1", m_LogDirectory);
 			MakeDirectory(m_LogDirectory);
 		}
-        m_CanHackLock         = true;
+        //m_CanHackLock         = true;
         LoadConfig();
     }
     
@@ -36,18 +37,22 @@ class HRZCodeLock extends PluginBase
 
     private void CreateConfig()
     {
-        m_CanHackLock        = true;
+        //m_CanHackLock        = true;
         SaveConfig();
         LoadConfig();
     }
+	
+	// Deactivated for the Moment
 
     bool CanHackLock()
     {
         LoadConfig();
         return m_CanHackLock;
     }
-}
 
+}
+*/
+/*
 static ref HRZCodeLock g_HRZCodeLock;
 static ref HRZCodeLock GetHRZCodeLock()
 {
@@ -58,3 +63,4 @@ static ref HRZCodeLock GetHRZCodeLock()
     
     return g_HRZCodeLock;
 }
+*/
